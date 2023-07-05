@@ -30,18 +30,13 @@ public class CrateListener implements Listener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-
-        System.out.println("onPlace");
-
         ItemStack hand = ReflectionUtil.getItemInHand(player);
 
         if(hand != null) {
-            System.out.println("hand not null");
             if(crateHandler.isCrate(hand)) {
                 Crate crate = crateHandler.getByItem(hand);
 
                 if(crate != null) {
-                    System.out.println("crate not null");
                     Location blockLocation = event.getBlockPlaced().getLocation();
 
                     crate.getLocations().add(blockLocation);
@@ -63,10 +58,7 @@ public class CrateListener implements Listener {
         Location location = event.getBlock().getLocation();
         Crate crate = crateHandler.getByLocation(location);
 
-        System.out.println("onBreak");
-
         if(crate != null) {
-            System.out.println("crate not null");
             if(player.isSneaking() && player.getGameMode().equals(GameMode.CREATIVE)) {
                 crateHandler.removeLocation(crate, location);
 
