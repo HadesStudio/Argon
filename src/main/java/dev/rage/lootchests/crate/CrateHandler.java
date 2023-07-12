@@ -268,4 +268,15 @@ public class CrateHandler {
 
         player.sendMessage(ColorUtil.colorize(replacement.toString()));
     }
+
+    public void giveVirtualKey(Player player, Crate crate, int amount) {
+        LootChests.get().getProfileHandler().getProfile(player).addVirtualKey(crate.getId(), amount);
+
+        Replacement replacement = new Replacement(LanguageConfig.CRATE_ADDED_VIRTUAL_KEYS);
+        replacement.add("<prefix>", LanguageConfig.PREFIX);
+        replacement.add("<amount>", amount);
+        replacement.add("<crate>", crate.getName());
+
+        player.sendMessage(ColorUtil.colorize(replacement.toString()));
+    }
 }

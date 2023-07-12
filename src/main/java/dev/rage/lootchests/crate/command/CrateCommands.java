@@ -85,4 +85,22 @@ public class CrateCommands {
     public static void givekeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
         BukkitUtil.getOnlinePlayers().forEach(online -> LootChests.get().getCrateHandler().giveKey(online, crate, amount));
     }
+
+    @Command(
+            names = { "crate givevirtualkey", "cr givevirtualkey" },
+            description = "Give the crate virtual key",
+            permission = "lootchests.command.crate.givevirtualkey"
+    )
+    public static void givevirtualkey(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "target") Player target, @Param(name = "amount") int amount) {
+        LootChests.get().getCrateHandler().giveVirtualKey(target, crate, amount);
+    }
+
+    @Command(
+            names = { "crate givevirtualkeyall", "cr givevirtualkeyall" },
+            description = "Give the crate virtual key to all players",
+            permission = "lootchests.command.crate.givevirtualkey all"
+    )
+    public static void givevirtualkeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
+        BukkitUtil.getOnlinePlayers().forEach(online -> LootChests.get().getCrateHandler().giveVirtualKey(online, crate, amount));
+    }
 }
