@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Profile implements Serializable<Profile> {
 
     private final UUID id;
-    // +527441019720
+    
     private Map<UUID, Integer> storedKeys = new HashMap<>();
     private Map<UUID, Integer> virtualKeys = new HashMap<>();
 
@@ -35,9 +35,9 @@ public class Profile implements Serializable<Profile> {
     }
 
     public void addStoredKey(UUID id, int amount) {
-        if (storedKeys.containsKey(id)) storedKeys.put(id, storedKeys.get(id) + 1);
+        if (storedKeys.containsKey(id)) storedKeys.put(id, storedKeys.get(id) + amount);
 
-        storedKeys.put(id, 1);
+        storedKeys.put(id, amount);
     }
 
     public void removeStoredKey(UUID id, int amount) {
@@ -47,9 +47,9 @@ public class Profile implements Serializable<Profile> {
     }
 
     public void addVirtualKey(UUID id, int amount) {
-        if (virtualKeys.containsKey(id)) virtualKeys.put(id, virtualKeys.get(id) + 1);
+        if (virtualKeys.containsKey(id)) virtualKeys.put(id, virtualKeys.get(id) + amount);
 
-        virtualKeys.put(id, 1);
+        virtualKeys.put(id, amount);
     }
 
     public void removeVirtualKey(UUID id, int amount) {
