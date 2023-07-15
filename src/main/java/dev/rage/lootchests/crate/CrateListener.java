@@ -41,6 +41,8 @@ public class CrateListener implements Listener {
 
                     crate.getLocations().add(blockLocation);
 
+                    crate.spawnHolograms();
+
                     Replacement replacement = new Replacement(LanguageConfig.CRATE_PLACED);
                     replacement.add("<prefix>", LanguageConfig.PREFIX);
                     replacement.add("<crate>", crate.getName());
@@ -61,6 +63,8 @@ public class CrateListener implements Listener {
         if(crate != null) {
             if(player.isSneaking() && player.getGameMode().equals(GameMode.CREATIVE)) {
                 crateHandler.removeLocation(crate, location);
+
+                crate.deleteHologram(location);
 
                 Replacement replacement = new Replacement(LanguageConfig.CRATE_REMOVED);
                 replacement.add("<prefix>", LanguageConfig.PREFIX);

@@ -81,6 +81,7 @@ public class CrateHandler {
                 Crate crate = new Crate(UUID.fromString(key), name);
                 crate.deserialize(map);
 
+                crate.spawnHolograms();
                 crates.add(crate);
             }
         }

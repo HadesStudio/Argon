@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Profile implements Serializable<Profile> {
 
     private final UUID id;
-    
+
     private Map<UUID, Integer> storedKeys = new HashMap<>();
     private Map<UUID, Integer> virtualKeys = new HashMap<>();
 

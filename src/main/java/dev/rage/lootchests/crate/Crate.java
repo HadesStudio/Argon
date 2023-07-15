@@ -2,6 +2,7 @@ package dev.rage.lootchests.crate;
 
 import dev.rage.lootchests.LootChests;
 import dev.rage.lootchests.config.LanguageConfig;
+import dev.rage.lootchests.hologram.Hologram;
 import dev.rage.lootchests.item.LootItem;
 import dev.rage.lootchests.util.*;
 import dev.rage.lootchests.util.config.Replacement;
@@ -36,6 +37,8 @@ public class Crate implements Serializable<Crate> {
 
     private List<Location> locations;
     private List<LootItem> lootItems;
+
+    private String hologramText;
 
     public Crate(UUID id, String name) {
         this.id = id;
@@ -168,5 +171,52 @@ public class Crate implements Serializable<Crate> {
         locations = locationList.stream().map((str -> LocationSerializer.INSTANCE.fromString(str))).collect(Collectors.toList());
 
         lootItems = (List<LootItem>) map.get("loot");
+    }
+
+    public String getHologramText() {
+        if (hologramText == null) {
+            return color + name + " &7Crate";
+        }
+
+        return hologramText;
+    }
+
+    public void spawnHolograms() {
+        locations.forEach(location -> {
+            String id = location.getBlockX() + "|" + location.getBlockY() + "|" + location.getBlockZ();
+
+            Hologram hologram = LootChests.get().getHologramHandler().getHologram(id);
+
+            if (hologram == null) {
+                hologram = LootChests.get().getHologramHandler().createHologram(id, location.clone().add(0.5, 0, 0.5));
+
+                hologram.setText(getHologramText());
+
+                hologram.addBelowLine("&fLeft click to view loot", 0.35);
+                hologram.addBelowLine("&fRight click to open key", 0.28);
+
+                hologram.spawnAll();
+            } else {
+                hologram.respawnAll();
+            }
+        });
+    }
+
+    public void deleteHologram(Location location) {
+        String id = location.getBlockX() + "|" + location.getBlockY() + "|" + location.getBlockZ();
+
+        Hologram hologram = LootChests.get().getHologramHandler().getHologram(id);
+        hologram.despawnAll();
+
+        LootChests.get().getHologramHandler().deleteHologram(id);
+    }
+
+    public void deleteHolograms() {
+        locations.forEach(this::deleteHologram);
+    }
+
+    public void updateHolograms() {
+        deleteHolograms();
+        spawnHolograms();
     }
 }

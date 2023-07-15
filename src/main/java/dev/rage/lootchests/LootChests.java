@@ -5,6 +5,7 @@ import dev.rage.lootchests.config.LanguageConfig;
 import dev.rage.lootchests.config.MenusConfig;
 import dev.rage.lootchests.config.SettingsConfig;
 import dev.rage.lootchests.crate.CrateHandler;
+import dev.rage.lootchests.hologram.HologramHandler;
 import dev.rage.lootchests.profile.ProfileHandler;
 import dev.rage.lootchests.util.command.CommandHandler;
 import dev.rage.lootchests.util.command.bukkit.BukkitCommandHandler;
@@ -27,6 +28,7 @@ public class LootChests extends JavaPlugin {
 
     private CrateHandler crateHandler;
     private ProfileHandler profileHandler;
+    private HologramHandler hologramHandler;
 
     @Override
     public void onLoad() {
@@ -44,6 +46,7 @@ public class LootChests extends JavaPlugin {
 
         crateHandler = new CrateHandler(this);
         profileHandler = new ProfileHandler(this);
+        hologramHandler = new HologramHandler();
 
         commandHandler.register(new LootChestCommand());
 
