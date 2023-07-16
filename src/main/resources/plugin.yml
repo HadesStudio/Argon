@@ -1,4 +1,4 @@
 author: Rage Development Team
-name: LootChests
+name: Argon
 version: 0.1
-main: dev.rage.lootchests.LootChests
+main: dev.rage.argon.Argon

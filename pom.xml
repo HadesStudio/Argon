@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.rage</groupId>
-    <artifactId>lootchests</artifactId>
+    <artifactId>argon</artifactId>
     <version>0.1</version>
 
     <properties>
@@ -28,7 +28,7 @@
     </dependencies>
 
     <build>
-        <finalName>LootChests-0.1</finalName>
+        <finalName>Argon-0.1</finalName>
     </build>
 
 </project>
