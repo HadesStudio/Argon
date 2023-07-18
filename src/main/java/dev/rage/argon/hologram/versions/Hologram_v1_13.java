@@ -60,9 +60,6 @@ public class Hologram_v1_13 implements IHologram {
             ICHAT_BASE_COMPONENT = Class.forName(nms + ".IChatBaseComponent");
             CHAT_SERIALIZER = Class.forName(nms + ".IChatBaseComponent$ChatSerializer");
 
-            ICHAT_BASE_COMPONENT = Class.forName(nms + ".IChatBaseComponent");
-            CHAT_SERIALIZER = Class.forName(nms + ".IChatBaseComponent$ChatSerializer");
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -72,7 +69,7 @@ public class Hologram_v1_13 implements IHologram {
     public void spawnHologram(Player player, Hologram hologram) {
         if (viewers.contains(player.getUniqueId())) return;
 
-        Location location = hologram.getLocation().clone().add(0, 1, 0);
+        Location location = hologram.getLocation().clone().add(0, 0.8, 0);
         try {
 
             Object craftWorld = getCraftWorld(location);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Hologram_v1_14_to_v1_16 implements IHologram {
+public class Hologram_v1_14 implements IHologram {
 
     private Class<?>
             // Packet classes
@@ -32,7 +32,7 @@ public class Hologram_v1_14_to_v1_16 implements IHologram {
 
     private Object entityArmorStand;
 
-    public Hologram_v1_14_to_v1_16() {
+    public Hologram_v1_14() {
         viewers = new ArrayList<>();
 
         String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -61,9 +61,6 @@ public class Hologram_v1_14_to_v1_16 implements IHologram {
             ICHAT_BASE_COMPONENT = Class.forName(nms + ".IChatBaseComponent");
             CHAT_SERIALIZER = Class.forName(nms + ".IChatBaseComponent$ChatSerializer");
 
-            ICHAT_BASE_COMPONENT = Class.forName(nms + ".IChatBaseComponent");
-            CHAT_SERIALIZER = Class.forName(nms + ".IChatBaseComponent$ChatSerializer");
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -73,7 +70,7 @@ public class Hologram_v1_14_to_v1_16 implements IHologram {
     public void spawnHologram(Player player, Hologram hologram) {
         if (viewers.contains(player.getUniqueId())) return;
 
-        Location location = hologram.getLocation().clone().add(0, 1, 0);
+        Location location = hologram.getLocation().clone().add(0, 0.8, 0);
         try {
 
             Object craftWorld = getCraftWorld(location);

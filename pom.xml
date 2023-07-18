@@ -25,6 +25,22 @@
             <artifactId>paperspigot-server</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-115</artifactId>
+            <version>1.15.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/spigot-115.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-116</artifactId>
+            <version>1.16.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/spigot-116.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
