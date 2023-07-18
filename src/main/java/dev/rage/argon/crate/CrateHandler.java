@@ -147,6 +147,10 @@ public class CrateHandler {
         return crates.stream().filter(c -> c.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    public Crate getById(UUID id) {
+        return crates.stream().filter(c -> c.getId().equals(id)).findFirst().orElse(null);
+    }
+
     public Crate getByLocation(Location location) {
         for(Crate crate : crates) {
             for(Location crateLocation : crate.getLocations()) {
