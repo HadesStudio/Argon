@@ -22,7 +22,7 @@ public class CrateProvider implements Provider<Crate> {
             return crate;
         }
 
-        throw new ProviderException(source, "Crate named '<source>' was not found!");
+        throw new ProviderException("Crate named '<source>' was not found!", source);
     }
 
     @Override
