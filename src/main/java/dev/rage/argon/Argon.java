@@ -1,6 +1,6 @@
 package dev.rage.argon;
 
-import dev.rage.argon.command.LootChestCommand;
+import dev.rage.argon.command.ArgonCommand;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.MenusConfig;
 import dev.rage.argon.config.SettingsConfig;
@@ -48,7 +48,7 @@ public class Argon extends JavaPlugin {
         profileHandler = new ProfileHandler(this);
         hologramHandler = new HologramHandler();
 
-        commandHandler.register(new LootChestCommand());
+        commandHandler.register(new ArgonCommand());
 
         PluginManager pluginManager = getServer().getPluginManager();
 
