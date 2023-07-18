@@ -6,9 +6,12 @@ import dev.rage.argon.config.MenusConfig;
 import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.crate.CrateHandler;
 import dev.rage.argon.hologram.HologramHandler;
+import dev.rage.argon.license.License;
 import dev.rage.argon.profile.ProfileHandler;
+import dev.rage.argon.util.BroadcastUtil;
 import dev.rage.argon.util.command.CommandHandler;
 import dev.rage.argon.util.command.bukkit.BukkitCommandHandler;
+import dev.rage.argon.util.config.Config;
 import dev.rage.argon.util.menu.MenuListener;
 import dev.rage.argon.util.menu.runnable.MenuUpdateRunnable;
 import dev.rage.argon.util.prompt.PromptHandler;
@@ -30,6 +33,8 @@ public class Argon extends JavaPlugin {
     private ProfileHandler profileHandler;
     private HologramHandler hologramHandler;
 
+    private boolean refused = false;
+
     @Override
     public void onLoad() {
         instance = Optional.of(this);
@@ -37,6 +42,18 @@ public class Argon extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Config config = new Config(this, "license.yml");
+
+        if (!new License(config.getString("license"), this).isEnabled()) {
+            refused = true;
+            getServer().getPluginManager().disablePlugin(this);
+            getServer().getScheduler().cancelTasks(this);
+
+            BroadcastUtil.sendConsole(SettingsConfig.PRIMARY_COLOR + "[Argon] &cLicense key is invalid!");
+
+            return;
+        }
+
         new LanguageConfig(this);
         new MenusConfig(this);
         new SettingsConfig(this);
@@ -59,8 +76,10 @@ public class Argon extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        crateHandler.handleDisable();
-        profileHandler.handleDisable();
+        if (!refused) {
+            crateHandler.handleDisable();
+            profileHandler.handleDisable();
+        }
     }
 
     public static Argon get() {
