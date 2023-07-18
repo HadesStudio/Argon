@@ -7,6 +7,7 @@ import dev.rage.argon.crate.command.CrateCommands;
 import dev.rage.argon.crate.command.provider.CrateProvider;
 import dev.rage.argon.crate.menu.editor.CrateEditLootInventoryMenu;
 import dev.rage.argon.item.LootItem;
+import dev.rage.argon.profile.Profile;
 import dev.rage.argon.util.ColorUtil;
 import dev.rage.argon.util.InventoryUtil;
 import dev.rage.argon.util.ItemBuilder;
@@ -271,13 +272,17 @@ public class CrateHandler {
     }
 
     public void giveVirtualKey(Player player, Crate crate, int amount) {
-        Argon.get().getProfileHandler().getProfile(player).addVirtualKey(crate.getId(), amount);
+        Profile profile = Argon.get().getProfileHandler().getProfile(player);
 
-        Replacement replacement = new Replacement(LanguageConfig.CRATE_ADDED_VIRTUAL_KEYS);
-        replacement.add("<prefix>", LanguageConfig.PREFIX);
-        replacement.add("<amount>", amount);
-        replacement.add("<crate>", crate.getName());
+        if (profile != null) {
+            profile.addVirtualKey(crate.getId(), amount);
 
-        player.sendMessage(ColorUtil.colorize(replacement.toString()));
+            Replacement replacement = new Replacement(LanguageConfig.CRATE_ADDED_VIRTUAL_KEYS);
+            replacement.add("<prefix>", LanguageConfig.PREFIX);
+            replacement.add("<amount>", amount);
+            replacement.add("<crate>", crate.getName());
+
+            player.sendMessage(ColorUtil.colorize(replacement.toString()));
+        }
     }
 }

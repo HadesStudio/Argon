@@ -2,7 +2,6 @@ package dev.rage.argon.profile;
 
 import dev.rage.argon.util.config.Serializable;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashMap;
@@ -10,13 +9,18 @@ import java.util.Map;
 import java.util.UUID;
 
 @Getter @Setter
-@RequiredArgsConstructor
 public class Profile implements Serializable<Profile> {
 
     private final UUID id;
 
-    private Map<UUID, Integer> storedKeys = new HashMap<>();
-    private Map<UUID, Integer> virtualKeys = new HashMap<>();
+    private Map<UUID, Integer> storedKeys;
+    private Map<UUID, Integer> virtualKeys;
+
+    public Profile(UUID id) {
+        this.id = id;
+        this.storedKeys = new HashMap<>();
+        this.virtualKeys = new HashMap<>();
+    }
 
     @Override
     public Map<String, Object> serialize() {

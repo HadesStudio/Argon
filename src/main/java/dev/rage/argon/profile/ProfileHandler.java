@@ -36,9 +36,9 @@ public class ProfileHandler {
     }
 
     public void loadProfile(UUID id) {
-        if (config.contains("profiles." + id.toString())) {
-            Profile profile = new Profile(id);
+        Profile profile = new Profile(id);
 
+        if (config.contains("profiles." + id.toString())) {
             Map<UUID, Integer> storedKeys = new HashMap<>();
             Map<UUID, Integer> virtualKeys = new HashMap<>();
 
@@ -52,9 +52,9 @@ public class ProfileHandler {
 
             profile.setStoredKeys(storedKeys);
             profile.setVirtualKeys(virtualKeys);
-
-            profiles.add(profile);
         }
+
+        profiles.add(profile);
     }
 
     public void handleDisable() {
