@@ -92,6 +92,11 @@ public class CrateListener implements Listener {
         if (crate != null) {
             if (crate.isOpenFromKey()) {
                 if (crate.giveLoot(player)) {
+                    if (hand.getAmount() == 1) {
+                        player.setItemInHand(new ItemStack(Material.AIR, 1));
+                    } else {
+                        hand.setAmount(hand.getAmount() - 1);
+                    }
 
                     player.updateInventory();
                     player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_12) ? Sound.valueOf("BLOCK_NOTE_PLING") : Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"))), 20.0f, 15.0f);

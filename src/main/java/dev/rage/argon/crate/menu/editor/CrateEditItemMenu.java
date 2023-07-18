@@ -30,7 +30,7 @@ public class CrateEditItemMenu extends Menu {
 	
 	@Override
 	public String getTitle(Player player) {
-		return "&9Editing &f" + item.getItemStack().getType().name();
+		return SettingsConfig.SECONDARY_COLOR + "Editing &f" + item.getItemStack().getType().name();
 	}
 
 	@Override
