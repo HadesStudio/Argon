@@ -61,9 +61,9 @@ public class Argon extends JavaPlugin {
         commandHandler = new BukkitCommandHandler(this);
         promptHandler = new PromptHandler(this);
 
+        hologramHandler = new HologramHandler();
         crateHandler = new CrateHandler(this);
         profileHandler = new ProfileHandler(this);
-        hologramHandler = new HologramHandler();
 
         commandHandler.register(new ArgonCommand());
 
