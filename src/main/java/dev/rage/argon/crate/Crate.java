@@ -114,6 +114,7 @@ public class Crate implements Serializable<Crate> {
 
         if (selected.getCommands().isEmpty()) {
             player.getInventory().addItem(selected.getItemStack());
+            player.updateInventory();
         } else {
             selected.getCommands().forEach(cmd -> {
                 Replacement replacement = new Replacement(cmd);
