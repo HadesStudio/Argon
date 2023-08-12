@@ -90,7 +90,9 @@ public class Hologram {
 		World playerWorld = player.getWorld();
 
 		if (playerWorld.equals(location.getWorld())) {
-			entityHologram.spawnHologram(player, this);
+			if (!text.equalsIgnoreCase("<empty-line>")) {
+				entityHologram.spawnHologram(player, this);
+			}
 		}
 	}
 
@@ -128,7 +130,7 @@ public class Hologram {
 		entityHologram.updateHologram(player, this);
 	}
 
-	public Hologram addAboveLine(String text, double highest) {
+	public void addAboveLine(String text, double highest) {
 		Hologram hologram = aboveLines.size() > 0 ? aboveLines.get(aboveLines.size() - 1) : this;
 		Location location = hologram.getLocation().clone().add(0.0, highest, 0.0);
 
@@ -138,7 +140,6 @@ public class Hologram {
 		aboveHologram.setText(text);
 
 		aboveLines.add(aboveHologram);
-		return aboveHologram;
 	}
 
 	public void addBelowLine(String text, double lowest) {

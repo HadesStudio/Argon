@@ -65,6 +65,10 @@ public class CrateHandler {
 
                 map.put("locations", config.getStringList("crates." + key + ".locations"));
 
+                if (config.contains("crates." + key + ".hologram")) {
+                    map.put("hologram", config.getStringList("crates." + key + ".hologram"));
+                }
+
                 List<LootItem> items = new ArrayList<>();
                 if (config.contains("crates." + key + ".loot")) {
                     for (String k : config.getConfigurationSection("crates." + key + ".loot").getKeys(false)) {

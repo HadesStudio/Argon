@@ -5,6 +5,7 @@ import dev.rage.argon.crate.Crate;
 import dev.rage.argon.crate.menu.CrateViewAllMenu;
 import dev.rage.argon.crate.menu.button.CrateInfoButton;
 import dev.rage.argon.crate.menu.editor.button.CrateEditButton;
+import dev.rage.argon.crate.menu.editor.button.CrateHologramButton;
 import dev.rage.argon.crate.menu.location.CrateLocationsMenu;
 import dev.rage.argon.crate.menu.loot.CrateLootMenu;
 import dev.rage.argon.util.ColorUtil;
@@ -28,7 +29,9 @@ import java.util.stream.IntStream;
 public class CrateEditorMenu extends Menu {
 
 	private final Crate crate;
-	
+
+	public int selectedHologramLine = 0;
+
 	@Override
 	public String getTitle(Player player) {
 		return SettingsConfig.SECONDARY_COLOR + "Editing &r" + crate.getColor() + crate.getName();
@@ -152,6 +155,8 @@ public class CrateEditorMenu extends Menu {
 					crate.setVirtualKeys(!crate.isVirtualKeys());
 				}
 		));
+
+		buttons.put(12, new CrateHologramButton(crate, this));
 		
 		buttons.put(30, new Button() {
 			

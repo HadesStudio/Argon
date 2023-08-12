@@ -31,6 +31,7 @@ public class Crate implements Serializable<Crate> {
     private ChatColor color;
     private ItemStack opener;
     private ItemStack key;
+    private int lootQuantity;
 
     private boolean virtualKeys;
     private boolean openFromKey;
@@ -38,7 +39,7 @@ public class Crate implements Serializable<Crate> {
     private List<Location> locations;
     private List<LootItem> lootItems;
 
-    private String hologramText;
+    private List<String> hologramLines;
 
     public Crate(UUID id, String name) {
         this.id = id;
@@ -47,12 +48,19 @@ public class Crate implements Serializable<Crate> {
         color = ChatColor.WHITE;
         opener = new ItemStack(Material.CHEST);
         key = new ItemStack(Material.TRIPWIRE_HOOK);
+        lootQuantity = 1;
 
         virtualKeys = false;
         openFromKey = false;
 
         locations = new ArrayList<>();
         lootItems = new ArrayList<>();
+
+        hologramLines = new ArrayList<>();
+        hologramLines.add("<crate> &7Crate");
+        hologramLines.add("<empty-line>");
+        hologramLines.add("&fLeft click to view loot");
+        hologramLines.add("&fRight click to open key");
     }
 
     public LootItem selectItem() {
@@ -148,6 +156,8 @@ public class Crate implements Serializable<Crate> {
 
         map.put("loot", lootItems);
 
+        map.put("hologram", hologramLines);
+
         return map;
     }
 
@@ -171,29 +181,35 @@ public class Crate implements Serializable<Crate> {
         locations = locationList.stream().map((str -> LocationSerializer.INSTANCE.fromString(str))).collect(Collectors.toList());
 
         lootItems = (List<LootItem>) map.get("loot");
-    }
 
-    public String getHologramText() {
-        if (hologramText == null) {
-            return color + name + " &7Crate";
-        }
-
-        return hologramText;
+        hologramLines = (List<String>) map.get("hologram");
     }
 
     public void spawnHolograms() {
         locations.forEach(location -> {
+            if (hologramLines == null) return;
+            if (hologramLines.isEmpty()) return;
+
             String id = location.getBlockX() + "|" + location.getBlockY() + "|" + location.getBlockZ();
 
             Hologram hologram = Argon.get().getHologramHandler().getHologram(id);
 
             if (hologram == null) {
-                hologram = Argon.get().getHologramHandler().createHologram(id, location.clone().add(0.5, 0, 0.5));
+                hologram = Argon.get().getHologramHandler().createHologram(id, location.clone().add(0.5, -1, 0.5));
 
-                hologram.setText(getHologramText());
+                List<String> lines = new ArrayList<>(getHologramLines());
 
-                hologram.addBelowLine("&fLeft click to view loot", 0.35);
-                hologram.addBelowLine("&fRight click to open key", 0.28);
+                Collections.reverse(lines);
+
+                hologram.getAboveLines().clear();
+                for (int i = 0; i < lines.size(); i++) {
+                    if (i == 0) {
+                        hologram.setText(lines.get(0).replace("<crate>", color + name));
+                        continue;
+                    }
+
+                    hologram.addAboveLine(lines.get(i).replace("<crate>", color + name), 0.28);
+                }
 
                 hologram.spawnAll();
             } else {
