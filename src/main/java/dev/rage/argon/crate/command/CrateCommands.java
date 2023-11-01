@@ -1,6 +1,6 @@
 package dev.rage.argon.crate.command;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.crate.Crate;
 import dev.rage.argon.crate.menu.CrateViewAllMenu;
@@ -14,19 +14,15 @@ import org.bukkit.entity.Player;
 
 public class CrateCommands {
 
-    @Command(
-            names = { "crate create", "cr create"},
-            description = "Create a new crate",
-            permission = "lootchests.command.crate.create"
-    )
+    @Command(names = { "crate create", "cr create"}, description = "Create a new crate", permission = "lootchests.command.crate.create")
     public static void create(Player player, @Param(name = "crate name") String name) {
-        Crate crate = Argon.get().getCrateHandler().getByName(name);
+        Crate crate = ArgonPlugin.get().getCrateHandler().getByName(name);
         if (crate != null) {
             player.sendMessage(ColorUtil.colorize(LanguageConfig.CRATE_ALREADY_CREATED.replace("<prefix>", LanguageConfig.PREFIX).replace("<crate>", crate.getName())));
             return;
         }
 
-        crate = Argon.get().getCrateHandler().createCrate(name);
+        crate = ArgonPlugin.get().getCrateHandler().createCrate(name);
         player.sendMessage(ColorUtil.colorize(LanguageConfig.CRATE_CREATED.replace("<prefix>", LanguageConfig.PREFIX).replace("<crate>", crate.getName())));
     }
 
@@ -36,7 +32,7 @@ public class CrateCommands {
             permission = "lootchests.command.crate.delete"
     )
     public static void delete(Player player, @Param(name = "crate name") Crate crate) {
-        Argon.get().getCrateHandler().deleteCrate(crate);
+        ArgonPlugin.get().getCrateHandler().deleteCrate(crate);
         player.sendMessage(ColorUtil.colorize(LanguageConfig.CRATE_DELETED.replace("<prefix>", LanguageConfig.PREFIX).replace("<crate>", crate.getName())));
     }
 
@@ -46,7 +42,7 @@ public class CrateCommands {
             permission = "lootchests.command.crate.crate"
     )
     public static void crate(Player player, @Param(name = "crate name") Crate crate) {
-        Argon.get().getCrateHandler().giveCrate(player, crate);
+        ArgonPlugin.get().getCrateHandler().giveCrate(player, crate);
         player.sendMessage(ColorUtil.colorize(LanguageConfig.CRATE_GIVEN_CRATE.replace("<prefix>", LanguageConfig.PREFIX).replace("<crate>", crate.getName())));
     }
 
@@ -74,7 +70,7 @@ public class CrateCommands {
             permission = "lootchests.command.crate.givekey"
     )
     public static void givekey(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "target") Player target, @Param(name = "amount") int amount) {
-        Argon.get().getCrateHandler().giveKey(target, crate, amount);
+        ArgonPlugin.get().getCrateHandler().giveKey(target, crate, amount);
     }
 
     @Command(
@@ -83,7 +79,7 @@ public class CrateCommands {
             permission = "lootchests.command.crate.givekeyall"
     )
     public static void givekeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
-        BukkitUtil.getOnlinePlayers().forEach(online -> Argon.get().getCrateHandler().giveKey(online, crate, amount));
+        BukkitUtil.getOnlinePlayers().forEach(online -> ArgonPlugin.get().getCrateHandler().giveKey(online, crate, amount));
     }
 
     @Command(
@@ -92,7 +88,7 @@ public class CrateCommands {
             permission = "lootchests.command.crate.givevirtualkey"
     )
     public static void givevirtualkey(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "target") Player target, @Param(name = "amount") int amount) {
-        Argon.get().getCrateHandler().giveVirtualKey(target, crate, amount);
+        ArgonPlugin.get().getCrateHandler().giveVirtualKey(target, crate, amount);
     }
 
     @Command(
@@ -101,6 +97,6 @@ public class CrateCommands {
             permission = "lootchests.command.crate.givevirtualkey all"
     )
     public static void givevirtualkeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
-        BukkitUtil.getOnlinePlayers().forEach(online -> Argon.get().getCrateHandler().giveVirtualKey(online, crate, amount));
+        BukkitUtil.getOnlinePlayers().forEach(online -> ArgonPlugin.get().getCrateHandler().giveVirtualKey(online, crate, amount));
     }
 }

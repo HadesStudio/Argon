@@ -1,6 +1,6 @@
 package dev.rage.argon.util.prompt;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,7 @@ public abstract class Prompt<T> {
 	}
 	
 	public void startPrompt(Player player, long timeout) {
-		PromptHandler promptHandler = Argon.get().getPromptHandler();
+		PromptHandler promptHandler = ArgonPlugin.get().getPromptHandler();
 		promptHandler.startPrompt(player, this, timeout);
 	}
 }

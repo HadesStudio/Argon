@@ -1,6 +1,6 @@
 package dev.rage.argon.crate.menu.editor;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.crate.Crate;
@@ -40,7 +40,7 @@ public class CrateEditLootInventoryMenu implements Listener {
 			items.put(id, item);
 			inventory.setItem(item.getPosition(), applyId(item, id));
 		});
-		
+
 		target.openInventory(inventory);
 	}
 
@@ -54,16 +54,18 @@ public class CrateEditLootInventoryMenu implements Listener {
 			if (inventory != player.getInventory()) {
 				if (player.hasPermission("lootchests.command.crate.edit") && title.contains(SettingsConfig.SECONDARY_COLOR + "Editing loot: ")) {
 					String crateName = ChatColor.stripColor(title.replace(SettingsConfig.SECONDARY_COLOR + "Editing loot: ", ""));
-					Crate crate = Argon.get().getCrateHandler().getByName(crateName);
+					Crate crate = ArgonPlugin.get().getCrateHandler().getByName(crateName);
 
 					List<LootItem> items = new ArrayList<>();
 
-					for(int i = 0; i < inventory.getSize(); i++) {
-						ItemStack itemStack = inventory.getItem(i);
-						if(itemStack != null && itemStack.getType() != Material.AIR) {
-							LootItem item = readId(itemStack);
-							item.setPosition(i);
 
+					for (int i = 0; i < inventory.getSize(); i++) {
+						ItemStack itemStack = inventory.getItem(i);
+						if (itemStack != null && itemStack.getType() != Material.AIR) {
+							LootItem item = new LootItem(itemStack);
+							//LootItem item = readId(itemStack); (mira esto luis xfa, da error)
+
+							item.setPosition(i);
 							items.add(item);
 						}
 					}
@@ -82,8 +84,10 @@ public class CrateEditLootInventoryMenu implements Listener {
 		for (int i = 0; i < player.getInventory().getContents().length; i++) {
 			ItemStack item = player.getInventory().getContents()[i];
 
-			if (hasId(item)) {
-				player.getInventory().setItem(i, removeId(item));
+			if(item != null && item.getType() != Material.AIR) {
+				if (hasId(item)) {
+					player.getInventory().setItem(i, removeId(item));
+				}
 			}
 		}
 	}
@@ -97,7 +101,12 @@ public class CrateEditLootInventoryMenu implements Listener {
 		return builder.build();
 	}
 
+
 	public LootItem readId(ItemStack stack) {
+		if (stack == null || !stack.hasItemMeta()) {
+			return new LootItem(stack);
+		}
+
 		ItemMeta meta = stack.getItemMeta();
 
 		if (meta.hasLore()) {
@@ -119,7 +128,7 @@ public class CrateEditLootInventoryMenu implements Listener {
 		ItemMeta meta = stack.getItemMeta();
 
 		List<String> newLore = new ArrayList<>();
-		if (meta.hasLore()) {
+		if (meta != null && meta.hasLore()) {
 			List<String> lore = meta.getLore();
 
 			String line = ChatColor.stripColor(lore.get(lore.size() - 1));

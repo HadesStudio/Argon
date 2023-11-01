@@ -1,6 +1,6 @@
 package dev.rage.argon.crate;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.hologram.Hologram;
 import dev.rage.argon.item.LootItem;
@@ -122,7 +122,7 @@ public class Crate implements Serializable<Crate> {
                 replacement.add("<item-name>", selected.getItemStack().getItemMeta().getDisplayName());
                 replacement.add("<item-amount>", selected.getItemStack().getAmount());
 
-                Bukkit.getServer().getScheduler().runTask(Argon.get(),
+                Bukkit.getServer().getScheduler().runTask(ArgonPlugin.getPlugin(),
                         () -> Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), replacement.toString()));
             });
         }
@@ -193,10 +193,10 @@ public class Crate implements Serializable<Crate> {
 
             String id = location.getBlockX() + "|" + location.getBlockY() + "|" + location.getBlockZ();
 
-            Hologram hologram = Argon.get().getHologramHandler().getHologram(id);
+            Hologram hologram = ArgonPlugin.get().getHologramHandler().getHologram(id);
 
             if (hologram == null) {
-                hologram = Argon.get().getHologramHandler().createHologram(id, location.clone().add(0.5, -1, 0.5));
+                hologram = ArgonPlugin.get().getHologramHandler().createHologram(id, location.clone().add(0.5, -1, 0.5));
 
                 List<String> lines = new ArrayList<>(getHologramLines());
 
@@ -222,10 +222,10 @@ public class Crate implements Serializable<Crate> {
     public void deleteHologram(Location location) {
         String id = location.getBlockX() + "|" + location.getBlockY() + "|" + location.getBlockZ();
 
-        Hologram hologram = Argon.get().getHologramHandler().getHologram(id);
+        Hologram hologram = ArgonPlugin.get().getHologramHandler().getHologram(id);
         hologram.despawnAll();
 
-        Argon.get().getHologramHandler().deleteHologram(id);
+        ArgonPlugin.get().getHologramHandler().deleteHologram(id);
     }
 
     public void deleteHolograms() {

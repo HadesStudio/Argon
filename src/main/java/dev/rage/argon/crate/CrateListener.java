@@ -1,6 +1,6 @@
 package dev.rage.argon.crate;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.crate.menu.editor.CrateEditorMenu;
 import dev.rage.argon.crate.menu.loot.CrateLootMenu;
@@ -86,7 +86,7 @@ public class CrateListener implements Listener {
         Block block = event.getClickedBlock();
 
         ItemStack hand = ReflectionUtil.getItemInHand(player);
-        Profile profile = Argon.get().getProfileHandler().getProfile(player);
+        Profile profile = ArgonPlugin.get().getProfileHandler().getProfile(player);
         Crate crate = crateHandler.getByKey(hand);
 
         if (crate != null) {

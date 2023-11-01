@@ -1,6 +1,6 @@
 package dev.rage.argon.crate;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.crate.command.CrateCommands;
@@ -30,14 +30,14 @@ public class CrateHandler {
     private final List<Crate> crates;
     private final Config config;
 
-    public CrateHandler(Argon instance) {
+    public CrateHandler(ArgonPlugin instance) {
         crates = new ArrayList<>();
         config = new Config(instance, "/data/crates.yml");
 
         load();
 
-        instance.getCommandHandler().getBinder().bind(Crate.class).toProvider(new CrateProvider(this));
-        instance.getCommandHandler().register(new CrateCommands());
+        ArgonPlugin.get().getCommandHandler().getBinder().bind(Crate.class).toProvider(new CrateProvider(this));
+        ArgonPlugin.get().getCommandHandler().register(new CrateCommands());
 
         Bukkit.getServer().getPluginManager().registerEvents(new CrateListener(this), instance);
         Bukkit.getServer().getPluginManager().registerEvents(new CrateEditLootInventoryMenu(), instance);
@@ -266,7 +266,7 @@ public class CrateHandler {
         ItemStack item = builder.build();
 
         if (InventoryUtil.isFull(player)) {
-            Argon.get().getProfileHandler().getProfile(player).addStoredKey(crate.getId(), 1);
+            ArgonPlugin.get().getProfileHandler().getProfile(player).addStoredKey(crate.getId(), 1);
         } else {
             player.getInventory().addItem(item);
         }
@@ -280,7 +280,7 @@ public class CrateHandler {
     }
 
     public void giveVirtualKey(Player player, Crate crate, int amount) {
-        Profile profile = Argon.get().getProfileHandler().getProfile(player);
+        Profile profile = ArgonPlugin.get().getProfileHandler().getProfile(player);
 
         if (profile != null) {
             profile.addVirtualKey(crate.getId(), amount);

@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.rage</groupId>
-    <artifactId>argon</artifactId>
-    <version>0.1</version>
+    <groupId>dev.rage.argon</groupId>
+    <artifactId>Argon</artifactId>
+    <version>0.1-STABLE</version>
+    <name>Argon</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -61,7 +62,7 @@
     </dependencies>
 
     <build>
-        <finalName>Argon-0.1</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
 
         <plugins>
             <plugin>

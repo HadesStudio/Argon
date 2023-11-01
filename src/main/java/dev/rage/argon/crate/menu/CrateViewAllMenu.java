@@ -1,6 +1,6 @@
 package dev.rage.argon.crate.menu;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.crate.Crate;
 import dev.rage.argon.crate.menu.button.CrateInfoButton;
 import dev.rage.argon.util.menu.button.Button;
@@ -23,7 +23,7 @@ public class CrateViewAllMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        List<Crate> crates = Argon.get().getCrateHandler().getCrates();
+        List<Crate> crates = ArgonPlugin.get().getCrateHandler().getCrates();
         crates.sort(Comparator.comparing(Crate::getName));
 
         for (Crate crate : crates) {

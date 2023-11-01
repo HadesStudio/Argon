@@ -1,6 +1,6 @@
 package dev.rage.argon.util.prompt;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -17,7 +17,7 @@ public class PromptListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onChat(AsyncPlayerChatEvent event) {
 		if(promptHandler.getPromptByPlayer(event.getPlayer()) != null) {
-			Bukkit.getScheduler().runTask(Argon.get(), () -> promptHandler.handleChat(event, promptHandler.getPromptByPlayer(event.getPlayer()).getPrompt()));
+			Bukkit.getScheduler().runTask(ArgonPlugin.getPlugin(), () -> promptHandler.handleChat(event, promptHandler.getPromptByPlayer(event.getPlayer()).getPrompt()));
 			event.setCancelled(true);
 		}
 	}

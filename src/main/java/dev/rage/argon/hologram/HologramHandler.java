@@ -1,6 +1,6 @@
 package dev.rage.argon.hologram;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.hologram.versions.*;
 import dev.rage.argon.hologram.versions.unsupported.UnsupportedHologram;
@@ -20,7 +20,7 @@ public class HologramHandler {
     public HologramHandler() {
         holograms = new ArrayList<>();
 
-        Bukkit.getServer().getPluginManager().registerEvents(new HologramListener(this), Argon.get());
+        Bukkit.getServer().getPluginManager().registerEvents(new HologramListener(this), ArgonPlugin.getPlugin());
     }
 
     public IHologram construct() {

@@ -25,8 +25,7 @@ public class Hologram_v1_14 implements IHologram {
             // DataWatcher classes
             DATA_WATCHER, DATA_WATCHER_SERIALIZER, DATA_WATCHER_REGISTRY,
             // Chat component classes
-            ICHAT_BASE_COMPONENT, CHAT_SERIALIZER
-            ;
+            ICHAT_BASE_COMPONENT, CHAT_SERIALIZER;
 
     private final List<UUID> viewers;
 

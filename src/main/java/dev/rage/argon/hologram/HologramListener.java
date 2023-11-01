@@ -1,6 +1,6 @@
 package dev.rage.argon.hologram;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -54,7 +54,7 @@ public class HologramListener implements Listener {
 
 		hologramHandler.getHolograms().forEach(hologram -> hologram.despawnAll(player));
 
-		Bukkit.getServer().getScheduler().runTaskLater(Argon.get(), () -> {
+		Bukkit.getServer().getScheduler().runTaskLater(ArgonPlugin.getPlugin(), () -> {
 			hologramHandler.getHolograms().stream()
 					.filter(hologram -> hologram.getLocation().getWorld().equals(player.getLocation().getWorld()))
 					.filter(hologram -> hologram.getLocation().distance(player.getLocation()) <= HOLOGRAM_VIEW_DISTANCE)

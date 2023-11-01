@@ -1,7 +1,6 @@
 package dev.rage.argon.profile.menu;
 
-import dev.rage.argon.Argon;
-import dev.rage.argon.command.ArgonCommand;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.crate.Crate;
@@ -32,7 +31,7 @@ public class CrateViewOwnMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        Profile profile = Argon.get().getProfileHandler().getProfile(player);
+        Profile profile = ArgonPlugin.get().getProfileHandler().getProfile(player);
 
         buttons.put(3, new Button() {
 
@@ -48,8 +47,8 @@ public class CrateViewOwnMenu extends Menu {
                 if (profile.getStoredKeys().keySet().isEmpty()) {
                     lore.add(" &cEmpty");
                 } else {
-                    profile.getStoredKeys().keySet().stream().filter(id -> Argon.get().getCrateHandler().getById(id) != null).forEach(id -> {
-                        Crate crate = Argon.get().getCrateHandler().getById(id);
+                    profile.getStoredKeys().keySet().stream().filter(id -> ArgonPlugin.get().getCrateHandler().getById(id) != null).forEach(id -> {
+                        Crate crate = ArgonPlugin.get().getCrateHandler().getById(id);
 
                         lore.add(" &f" + crate.getColor() + crate.getName() + "&7: &fx" + profile.getStoredKeys().get(id));
                     });
@@ -72,13 +71,13 @@ public class CrateViewOwnMenu extends Menu {
                     player.sendMessage(ColorUtil.colorize(replacement.toString()));
                     return;
                 }
-                profile.getStoredKeys().keySet().stream().filter(id -> Argon.get().getCrateHandler().getById(id) != null).forEach(id -> {
-                    Crate crate = Argon.get().getCrateHandler().getById(id);
+                profile.getStoredKeys().keySet().stream().filter(id -> ArgonPlugin.get().getCrateHandler().getById(id) != null).forEach(id -> {
+                    Crate crate = ArgonPlugin.get().getCrateHandler().getById(id);
 
                     if (crate.isVirtualKeys()) {
-                        Argon.get().getCrateHandler().giveVirtualKey(player, crate, profile.getStoredKeys().get(id));
+                        ArgonPlugin.get().getCrateHandler().giveVirtualKey(player, crate, profile.getStoredKeys().get(id));
                     } else {
-                        Argon.get().getCrateHandler().giveKey(player, crate, profile.getStoredKeys().get(id));
+                        ArgonPlugin.get().getCrateHandler().giveKey(player, crate, profile.getStoredKeys().get(id));
                     }
                 });
             }
@@ -99,8 +98,8 @@ public class CrateViewOwnMenu extends Menu {
                 if (profile.getVirtualKeys().keySet().isEmpty()) {
                     lore.add(" &cEmpty");
                 } else {
-                    profile.getVirtualKeys().keySet().stream().filter(id -> Argon.get().getCrateHandler().getById(id) != null).forEach(id -> {
-                        Crate crate = Argon.get().getCrateHandler().getById(id);
+                    profile.getVirtualKeys().keySet().stream().filter(id -> ArgonPlugin.get().getCrateHandler().getById(id) != null).forEach(id -> {
+                        Crate crate = ArgonPlugin.get().getCrateHandler().getById(id);
 
                         lore.add(" &f" + crate.getColor() + crate.getName() + "&7: &fx" + profile.getVirtualKeys().get(id));
                     });

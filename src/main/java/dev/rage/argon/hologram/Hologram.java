@@ -1,6 +1,6 @@
 package dev.rage.argon.hologram;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -32,7 +32,7 @@ public class Hologram {
 		this.name = name;
 		this.location = location;
 
-		entityHologram  = Argon.get().getHologramHandler().construct();
+		entityHologram  = ArgonPlugin.get().getHologramHandler().construct();
 	}
 
 	public void setText(String text) {
@@ -136,7 +136,7 @@ public class Hologram {
 
 		UUID id = UUID.randomUUID();
 		Hologram aboveHologram = new Hologram(id.toString(), location);
-		aboveHologram.setEntityHologram(Argon.get().getHologramHandler().construct());
+		aboveHologram.setEntityHologram(ArgonPlugin.get().getHologramHandler().construct());
 		aboveHologram.setText(text);
 
 		aboveLines.add(aboveHologram);
@@ -148,7 +148,7 @@ public class Hologram {
 
 		UUID id = UUID.randomUUID();
 		Hologram belowHologram = new Hologram(id.toString(), location);
-		belowHologram.setEntityHologram(Argon.get().getHologramHandler().construct());
+		belowHologram.setEntityHologram(ArgonPlugin.get().getHologramHandler().construct());
 		belowHologram.setText(text);
 
 		belowLines.add(belowHologram);

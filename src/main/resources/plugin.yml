@@ -1,4 +1,4 @@
 author: Rage Development Team
 name: Argon
-version: 0.1
-main: dev.rage.argon.Argon
+version: 0.1-STABLE
+main: dev.rage.argon.ArgonPlugin

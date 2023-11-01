@@ -1,6 +1,6 @@
 package dev.rage.argon.profile;
 
-import dev.rage.argon.Argon;
+import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.profile.command.ProfileCommands;
 import dev.rage.argon.util.config.Config;
 import lombok.Getter;
@@ -16,12 +16,12 @@ public class ProfileHandler {
 
     private final Config config;
 
-    public ProfileHandler(Argon instance) {
+    public ProfileHandler(ArgonPlugin instance) {
         profiles = new ArrayList<>();
 
         config = new Config(instance, "data/profiles.yml");
 
-        instance.getCommandHandler().register(new ProfileCommands());
+        ArgonPlugin.get().getCommandHandler().register(new ProfileCommands());
 
         Bukkit.getServer().getPluginManager().registerEvents(new ProfileListener(this), instance);
     }
