@@ -1,5 +1,6 @@
 package dev.rage.argon.crate;
 
+import com.cryptomorin.xseries.XSound;
 import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.crate.menu.editor.CrateEditorMenu;
@@ -128,7 +129,7 @@ public class CrateListener implements Listener {
                                     profile.removeVirtualKey(crate.getId(), 1);
 
                                     player.updateInventory();
-                                    player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_12) ? Sound.valueOf("BLOCK_NOTE_PLING") : Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"))), 20.0f, 15.0f);
+                                    player.playSound(player.getLocation(), XSound.BLOCK_LEVER_CLICK.parseSound(), 20.0f, 15.0f);
                                 }
                             }
                         } else {
@@ -148,7 +149,7 @@ public class CrateListener implements Listener {
                                 }
 
                                 player.updateInventory();
-                                player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_12) ? Sound.valueOf("BLOCK_NOTE_PLING") : Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"))), 20.0f, 15.0f);
+                                player.playSound(player.getLocation(), XSound.BLOCK_LEVER_CLICK.parseSound(), 20.0f, 15.0f);
                             }
                         } else {
                             if (player.isSneaking() && player.getGameMode().equals(GameMode.CREATIVE)) {
