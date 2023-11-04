@@ -6,8 +6,6 @@ import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.crate.Crate;
 import dev.rage.argon.item.LootItem;
 import dev.rage.argon.util.ColorUtil;
-import dev.rage.argon.util.ItemBuilder;
-import dev.rage.argon.util.JavaUtil;
 import dev.rage.argon.util.config.Replacement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,25 +18,20 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class CrateEditLootInventoryMenu implements Listener {
 
 	// Created for register listener.
 	public CrateEditLootInventoryMenu() { }
 
-	private Map<UUID, LootItem> items;
-
 	public CrateEditLootInventoryMenu(Player target, Crate crate) {
-		items = new HashMap<>();
-
 		Inventory inventory = Bukkit.createInventory(null, 54, (SettingsConfig.SECONDARY_COLOR + "Editing loot: " + crate.getColor() + crate.getName()));
 
 		crate.getLootItems().forEach(item -> {
-			UUID id = UUID.randomUUID();
-
-			items.put(id, item);
-			inventory.setItem(item.getPosition(), applyId(item, id));
+			inventory.setItem(item.getPosition(), setData(item));
 		});
 
 		target.openInventory(inventory);
@@ -62,8 +55,7 @@ public class CrateEditLootInventoryMenu implements Listener {
 					for (int i = 0; i < inventory.getSize(); i++) {
 						ItemStack itemStack = inventory.getItem(i);
 						if (itemStack != null && itemStack.getType() != Material.AIR) {
-							LootItem item = new LootItem(itemStack);
-							//LootItem item = readId(itemStack); (mira esto luis xfa, da error)
+							LootItem item = loadData(itemStack);
 
 							item.setPosition(i);
 							items.add(item);
@@ -79,81 +71,144 @@ public class CrateEditLootInventoryMenu implements Listener {
 					player.sendMessage(ColorUtil.colorize(replacement.toString()));
 				}
 			}
-		}
 
-		for (int i = 0; i < player.getInventory().getContents().length; i++) {
-			ItemStack item = player.getInventory().getContents()[i];
+			for (int i = 0; i < player.getInventory().getContents().length; i++) {
+				ItemStack item = player.getInventory().getContents()[i];
 
-			if(item != null && item.getType() != Material.AIR) {
-				if (hasId(item)) {
-					player.getInventory().setItem(i, removeId(item));
+				if(item != null && item.getType() != Material.AIR) {
+					if (hasData(item)) {
+						player.getInventory().setItem(i, removeData(item));
+					}
 				}
 			}
 		}
 	}
 
-	public ItemStack applyId(LootItem item, UUID id) {
-		ItemBuilder builder = new ItemBuilder(item.getItemStack().clone());
-
-		builder.addLore(" ");
-		builder.addLore("&8" + id.toString());
-
-		return builder.build();
-	}
-
-
-	public LootItem readId(ItemStack stack) {
-		if (stack == null || !stack.hasItemMeta()) {
-			return new LootItem(stack);
-		}
-
+	private boolean hasData(ItemStack stack) {
 		ItemMeta meta = stack.getItemMeta();
 
-		if (meta.hasLore()) {
+		if (meta != null) {
 			List<String> lore = meta.getLore();
-
-			String line = ChatColor.stripColor(lore.get(lore.size() - 1));
-
-			if (JavaUtil.isUUID(line)) {
-				UUID id = UUID.fromString(line);
-
-				return items.get(id);
-			}
-		}
-
-		return new LootItem(stack);
-	}
-
-	public ItemStack removeId(ItemStack stack) {
-		ItemMeta meta = stack.getItemMeta();
-
-		List<String> newLore = new ArrayList<>();
-		if (meta != null && meta.hasLore()) {
-			List<String> lore = meta.getLore();
-
-			String line = ChatColor.stripColor(lore.get(lore.size() - 1));
-
-			if (JavaUtil.isUUID(line)) {
-				for (int i = 0; i < lore.size() - 2; i++) {
-					newLore.add(lore.get(i));
+			if (lore != null) {
+				for (String line : lore) {
+					if (line.startsWith(ChatColor.AQUA + "Chance: ")) {
+						return true;
+					}
 				}
 			}
-		}
-
-		return new ItemBuilder(stack).setLore(newLore).build();
-	}
-
-	public boolean hasId(ItemStack stack) {
-		ItemMeta meta = stack.getItemMeta();
-
-		if (meta.hasLore()) {
-			List<String> lore = meta.getLore();
-
-			String line = ChatColor.stripColor(lore.get(lore.size() - 1));
-
-			return JavaUtil.isUUID(line);
 		}
 
 		return false;
+	}
+
+	private ItemStack setData(LootItem item) {
+		ItemStack stack = item.getItemStack().clone();
+		ItemMeta meta = stack.getItemMeta();
+
+		if (meta != null) {
+			List<String> lore = meta.getLore();
+			if (lore == null) {
+				lore = new ArrayList<>();
+			}
+
+			lore.add(ChatColor.STRIKETHROUGH.toString());
+			lore.add(ChatColor.AQUA + "Chance: " + ChatColor.WHITE + item.getChance());
+
+			if (item.getAnnouncement() != null) lore.add(ChatColor.AQUA + "Announcement: " + ChatColor.WHITE + item.getAnnouncement());
+
+			if (!item.getCommands().isEmpty()) {
+				lore.add(ChatColor.AQUA + "Commands:");
+
+				for (String command : item.getCommands()) {
+					lore.add("  /" + ChatColor.WHITE + command);
+				}
+			}
+
+			meta.setLore(lore);
+			stack.setItemMeta(meta);
+		}
+
+		return stack;
+	}
+
+	private ItemStack removeData(ItemStack stack) {
+		if (!hasData(stack)) return stack;
+
+		ItemMeta meta = stack.getItemMeta();
+
+		if (meta != null) {
+			List<String> lore = meta.getLore();
+			if (lore != null) {
+				Iterator<String> iterator = lore.iterator();
+				boolean inCustomList = false;
+				while (iterator.hasNext()) {
+					String line = iterator.next();
+
+					if (line.equalsIgnoreCase(ChatColor.STRIKETHROUGH.toString())) {
+						iterator.remove();
+					}
+
+					if (line.startsWith(ChatColor.AQUA + "Chance: ") || line.startsWith(ChatColor.AQUA + "Announcement: ")) {
+						iterator.remove();
+					}
+
+					if (inCustomList) {
+						if (line.startsWith("  /")) {
+							iterator.remove();
+						} else {
+							break;
+						}
+					} else if (line.startsWith(ChatColor.AQUA + "Commands:")) {
+						inCustomList = true;
+						iterator.remove();
+					}
+				}
+				meta.setLore(lore);
+				stack.setItemMeta(meta);
+			}
+		}
+
+		return stack;
+	}
+
+	private LootItem loadData(ItemStack stack) {
+		LootItem item = new LootItem(removeData(stack.clone()));
+
+		ItemMeta meta = stack.getItemMeta();
+
+		if (meta != null) {
+			List<String> lore = meta.getLore();
+			if (lore != null) {
+				boolean inCustomList = false;
+				for (String line : lore) {
+					if (line.startsWith(ChatColor.AQUA + "Chance: ")) {
+						String c = line.substring((ChatColor.AQUA + "Chance: " + ChatColor.WHITE).length());
+
+						item.setChance(Integer.parseInt(c));
+					}
+
+					if (line.startsWith(ChatColor.AQUA + "Announcement: ")) {
+						String a = line.substring((ChatColor.AQUA + "Announcement: " + ChatColor.WHITE).length());
+
+						item.setAnnouncement(a);
+					}
+
+					List<String> commands = new ArrayList<>();
+					if (inCustomList) {
+						if (line.startsWith("  /")) {
+							commands.add(line.substring(3));
+						} else {
+							break;
+						}
+					} else if (line.startsWith(ChatColor.AQUA + "Commands:")) {
+						inCustomList = true;
+					}
+
+					item.setCommands(commands);
+				}
+			}
+		}
+
+		return item;
 	}
 }
