@@ -70,7 +70,7 @@ public class Crate implements Serializable<Crate> {
         List<LootItem> selectedItems = new ArrayList<>();
 
         for(LootItem lootItem : lootItems) {
-            if(lootItem.getItemStack().getType().equals(Material.STAINED_GLASS_PANE)) {
+            if(lootItem.getItemStack().getType().name().contains("GLASS_PANE")) {
                 continue;
             }
 
