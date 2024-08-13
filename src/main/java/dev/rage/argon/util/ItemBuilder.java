@@ -3,8 +3,13 @@ package dev.rage.argon.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import dev.rage.argon.util.reflect.Reflection;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -170,6 +175,21 @@ public class ItemBuilder {
 	public ItemBuilder setSkullOwner(String owner) {
 		SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 		skullMeta.setOwner(owner);
+
+		itemStack.setItemMeta(skullMeta);
+		return this;
+	}
+
+	public ItemBuilder setSkullTexture(String texture) {
+		SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+		texture = "http://textures.minecraft.net/texture/" + texture;
+		byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", texture).getBytes());
+
+		GameProfile profile = new GameProfile(UUID.randomUUID(), "MHF_HEAD");
+		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
+
+		Reflection.getField(skullMeta.getClass(), "profile", GameProfile.class).set(skullMeta, profile);
 
 		itemStack.setItemMeta(skullMeta);
 		return this;
