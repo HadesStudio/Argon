@@ -14,8 +14,12 @@ import org.bukkit.entity.Player;
 
 public class CrateCommands {
 
-    @Command(names = { "crate create", "cr create"}, description = "Create a new crate", permission = "lootchests.command.crate.create")
-    public static void create(Player player, @Param(name = "crate name") String name) {
+    @Command(
+            names = { "crate create", "cr create"},
+            description = "Create a new crate",
+            permission = "lootchests.command.crate.create"
+    )
+    public void create(Player player, @Param(name = "crate name") String name) {
         Crate crate = ArgonPlugin.get().getCrateHandler().getByName(name);
         if (crate != null) {
             player.sendMessage(ColorUtil.colorize(LanguageConfig.CRATE_ALREADY_CREATED.replace("<prefix>", LanguageConfig.PREFIX).replace("<crate>", crate.getName())));
@@ -31,7 +35,7 @@ public class CrateCommands {
             description = "Delete a crate",
             permission = "lootchests.command.crate.delete"
     )
-    public static void delete(Player player, @Param(name = "crate name") Crate crate) {
+    public void delete(Player player, @Param(name = "crate name") Crate crate) {
         ArgonPlugin.get().getCrateHandler().deleteCrate(crate);
         player.sendMessage(ColorUtil.colorize(LanguageConfig.CRATE_DELETED.replace("<prefix>", LanguageConfig.PREFIX).replace("<crate>", crate.getName())));
     }
@@ -41,7 +45,7 @@ public class CrateCommands {
             description = "Get the crate",
             permission = "lootchests.command.crate.crate"
     )
-    public static void crate(Player player, @Param(name = "crate name") Crate crate) {
+    public void crate(Player player, @Param(name = "crate name") Crate crate) {
         ArgonPlugin.get().getCrateHandler().giveCrate(player, crate);
         player.sendMessage(ColorUtil.colorize(LanguageConfig.CRATE_GIVEN_CRATE.replace("<prefix>", LanguageConfig.PREFIX).replace("<crate>", crate.getName())));
     }
@@ -51,7 +55,7 @@ public class CrateCommands {
             description = "Show the list of crates",
             permission = "lootchests.command.crate.list"
     )
-    public static void list(Player player) {
+    public void list(Player player) {
         new CrateViewAllMenu().openMenu(player);
     }
 
@@ -60,7 +64,7 @@ public class CrateCommands {
             description = "Edit a crate",
             permission = "lootchests.command.crate.edit"
     )
-    public static void edit(Player player, @Param(name = "crate name") Crate crate) {
+    public void edit(Player player, @Param(name = "crate name") Crate crate) {
         new CrateEditorMenu(crate).openMenu(player);
     }
 
@@ -69,7 +73,7 @@ public class CrateCommands {
             description = "Give the crate key",
             permission = "lootchests.command.crate.givekey"
     )
-    public static void givekey(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "target") Player target, @Param(name = "amount") int amount) {
+    public void givekey(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "target") Player target, @Param(name = "amount") int amount) {
         ArgonPlugin.get().getCrateHandler().giveKey(target, crate, amount);
     }
 
@@ -78,7 +82,7 @@ public class CrateCommands {
             description = "Give the crate key to all players",
             permission = "lootchests.command.crate.givekeyall"
     )
-    public static void givekeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
+    public void givekeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
         BukkitUtil.getOnlinePlayers().forEach(online -> ArgonPlugin.get().getCrateHandler().giveKey(online, crate, amount));
     }
 
@@ -87,7 +91,7 @@ public class CrateCommands {
             description = "Give the crate virtual key",
             permission = "lootchests.command.crate.givevirtualkey"
     )
-    public static void givevirtualkey(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "target") Player target, @Param(name = "amount") int amount) {
+    public void givevirtualkey(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "target") Player target, @Param(name = "amount") int amount) {
         ArgonPlugin.get().getCrateHandler().giveVirtualKey(target, crate, amount);
     }
 
@@ -96,7 +100,7 @@ public class CrateCommands {
             description = "Give the crate virtual key to all players",
             permission = "lootchests.command.crate.givevirtualkey all"
     )
-    public static void givevirtualkeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
+    public void givevirtualkeyall(CommandSender sender, @Param(name = "crate name") Crate crate, @Param(name = "amount") int amount) {
         BukkitUtil.getOnlinePlayers().forEach(online -> ArgonPlugin.get().getCrateHandler().giveVirtualKey(online, crate, amount));
     }
 }

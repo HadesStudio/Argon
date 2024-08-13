@@ -1,315 +1,234 @@
 package dev.rage.argon.util.command.internal;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import dev.rage.argon.util.BukkitUtil;
+import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.util.ColorUtil;
-import dev.rage.argon.util.command.*;
-import dev.rage.argon.util.command.provider.ProviderData;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import dev.rage.argon.util.command.CommandContext;
+import dev.rage.argon.util.command.CommandHandler;
+import dev.rage.argon.util.command.data.Data;
+import dev.rage.argon.util.command.data.type.FlagData;
+import dev.rage.argon.util.command.data.type.ProviderData;
+import dev.rage.argon.util.command.provider.exception.ProviderException;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.spigotmc.SpigotConfig;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class InternalCommandContext implements CommandContext {
+public class InternalCommandContext extends CommandContext {
 
-	private String name;
-    private Set<String> aliases;
-    private String permission;
-    private String description;
-    private boolean async;
-    private boolean hidden;
-    private boolean root;
-        
-    public Method method;
-    protected Class<?> owningClass;
-    private Class<?> senderClass;
-    private List<ProviderData> parameters;
-    
-    private Map<String, CommandContext> childrens;
-    private CommandContext rootCommandContext;
-    
-	private final CommandHandler commandHandler;
-	
-	public InternalCommandContext(Class<?> senderClass, Class<?> owningClass, CommandHandler commandHandler) {
-		this.aliases = Sets.newHashSet();
-		this.parameters = Lists.newArrayList();
-		this.childrens = Maps.newHashMap();
-		
-		this.senderClass = senderClass;
-		this.owningClass = owningClass;
-		this.commandHandler = commandHandler;
-	}
-	
-	public InternalCommandContext(CommandHandler commandHandler) {
-		this.aliases = Sets.newHashSet();
-		this.parameters = Lists.newArrayList();
-		this.childrens = Maps.newHashMap();
-		
-		this.commandHandler = commandHandler;
+	public InternalCommandContext(CommandHandler commandHandler, Class<?> senderClass) {
+		super(commandHandler, senderClass);
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
+	public String getUsage(String realLabel) {
+        StringBuilder builder = new StringBuilder(LanguageConfig.COMMAND_USAGE_FORMAT);
+        builder.append(realLabel).append(" ");
 
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	@Override
-	public Set<String> getAliases() {
-		return aliases;
-	}
+        List<FlagData> flags = new ArrayList<>();
+        for (Data parameter : parameters) {
+            if (!(parameter instanceof FlagData))
+                continue;
 
-	@Override
-	public String getPermission() {
-		return permission;
-	}
+            FlagData data = (FlagData) parameter;
+            if (data.isHidden())
+                continue;
 
-	@Override
-	public void setPermission(String permission) {
-		this.permission = permission;
-	}
-	
-	@Override
-	public boolean hasPermission() {
-		return (permission != null && !permission.isEmpty());
-	}
+            flags.add(data);
+        }
 
-	@Override
-	public String getDescription() {
-		return description;
-	}
+        List<ProviderData> params = new ArrayList<>();
+        for (Data parameter : parameters) {
+            if (!(parameter instanceof ProviderData))
+                continue;
 
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	@Override
-	public boolean hasDescription() {
-		return (description != null && !description.isEmpty());
-	}
+            params.add((ProviderData) parameter);
+        }
 
-	@Override
-	public boolean isAsync() {
-		return async;
-	}
-
-	@Override
-	public void setAsync(boolean async) {
-		this.async = async;
-	}
-	
-	@Override
-	public boolean isHidden() {
-		return hidden;
-	}
-	
-	@Override
-	public void setHidden(boolean hidden) {
-		this.hidden = hidden;
-	}
-	
-	@Override
-	public boolean isRoot() {
-		return root;
-	}
-
-	@Override
-	public void setRoot(boolean root) {
-		this.root = root;
-	}
-	
-	@Override
-	public Method getMethod() {
-		return method;
-	}
-
-	@Override
-	public void setMethod(Method method) {
-		this.method = method;
-	}
-	
-	@Override
-	public Class<?> getOwningClass() {
-		return owningClass;
-	}
-
-	@Override
-	public Class<?> getSenderClass() {
-		return senderClass;
-	}
-	
-	@Override
-	public List<ProviderData> getParameters() {
-		return parameters;
-	}
-
-	@Override
-	public void setParameters(List<ProviderData> parameters) {
-		this.parameters = parameters;
-	}
-	
-	@Override
-	public Map<String, CommandContext> getChildrens() {
-		return childrens;
-	}
-
-	@Override
-	public CommandContext getRootContext() {
-		return rootCommandContext;
-	}
-
-	@Override
-	public void setRootContext(CommandContext context) {
-		this.rootCommandContext = context;
-	}
-	
-	@Override
-	public Set<String> getRealAliases() {
-		Set<String> aliases = this.getAliases();
-        aliases.remove(this.getName());
-        
-        return aliases;
-	}
-
-	@Override
-	public String getFullLabel() {
-		List<String> labels = Lists.newArrayList();
-        
-        for(CommandContext context = this; context != null; context = context.getRootContext()) {
-            String name = context.getName();
-            if (name != null) {
-                labels.add(name);
+        if (!params.isEmpty()) {
+            int index = 0;
+            for (ProviderData param : params) {
+                boolean required = param.getDefaultValue().isEmpty();
+                boolean wildcard = param.isWildCard();
+                builder.append(required ? "<" : "[").append(param.getName()).append(wildcard ? "..." : "").append(required ? ">" : "]").append(index != params.size() - 1 ? " " : "");
+                index++;
             }
         }
-        
-        Collections.reverse(labels);
-        
-        labels.remove(0);
-        
-        StringBuilder builder = new StringBuilder();
-        labels.forEach(s -> builder.append(s).append(' '));
-        
-        return builder.toString().trim();
-	}
 
-	protected Comparator<CommandContext> contextComparator = Comparator.comparing(CommandContext::getName);
-	
-	@Override
-	public List<TextComponent> getHelp(CommandSender sender, boolean print) {
-		List<TextComponent> help = Lists.newArrayList();
-    	
-    	
-    	List<CommandContext> contexts = this.getChildrens().values().stream().collect(Collectors.toList());
-    	contexts.sort(contextComparator);
-    	
-    	for(CommandContext context : contexts) {
-    		if(context.isRoot()) {
-    			if(context.getCommandExecutor().canExecute(sender)) {
-    				String label = this.commandHandler.getConfig().getCommandColor().toString() + '/' + context.getFullLabel() + (this.parameters != null ? " " + context.getUsageGenerator().generate() : "");
-        			
-        			if(label.endsWith(" ")) {
-        				label = label.substring(0, label.length() - 1);
-                	}
-        			
-                	String description = this.commandHandler.getConfig().getCommaColor().toString() + ',' + this.commandHandler.getConfig().getDescriptionColor()+ " (" + (context.getDescription() == null ? "Shows more sub commands" : context.getDescription()) + ")";
-                	
-                	String command = " " + label + description;
-                	
-                	TextComponent component = new TextComponent(ColorUtil.colorize(command));
-        	        
-        			component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(ColorUtil.colorize(label + description))));
-        	        component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, '/' + context.getFullLabel() + (this.parameters != null ? " " + context.getUsageGenerator().generate() : "")));
-                	
-                	help.add(component);
-    			}
-    		}
-    	}
-    	
-    	if(print) {
-        	if(help.isEmpty()) {
-        		sender.sendMessage(this.commandHandler.getConfig().getNoPermissionMessage());
-        	} else {
-        		sender.sendMessage(this.commandHandler.getConfig().getLineColor() + BukkitUtil.STRAIGHT_LINE_DEFAULT);
-        		for(TextComponent component : help) {
-        			if(sender instanceof Player) {
-        	        	((Player) sender).spigot().sendMessage(component);
-        	        } else {
-        	        	sender.sendMessage(TextComponent.toLegacyText(component));
-        	        }
+        boolean firstFlag = true;
+
+        if (!flags.isEmpty()) {
+
+            builder.append(" (");
+
+            for (FlagData flag : flags) {
+                if (!firstFlag) {
+                    builder.append(" | ");
                 }
-        		sender.sendMessage(this.commandHandler.getConfig().getLineColor() + BukkitUtil.STRAIGHT_LINE_DEFAULT);
-        	}
-        } 
-    	    	    	
-    	return help;
+                firstFlag = false;
+                builder.append("-").append(flag.getNames().get(0));
+            }
+
+            builder.append(")");
+        }
+
+        flags.clear();
+        params.clear();
+        return builder.toString();
 	}
 
 	@Override
-	public void registerChildren(CommandContext context) {
-		context.setRootContext(this);
-		getChildrens().put(context.getName().toLowerCase(), context);
-	}
+	public boolean execute(CommandSender sender, List<String> args, List<String> flags) {
+		if (method == null) {
+            if (!childs.isEmpty()) {
 
-	@Override
-	public boolean hasChildren(String name) {
-		return getChildrens().containsKey(name.toLowerCase());
-	}
+                List<CommandContext> usable = new ArrayList<>();
+                for (CommandContext context : childs)
+                    if (context.canUse(sender) && !context.isHidden())
+                        usable.add(context);
 
-	@Override
-	public CommandContext getChildren(String name) {
-		return getChildrens().get(name.toLowerCase());
-	}
+                if (usable.isEmpty()) {
+                    if (isHidden()) {
+                        sender.sendMessage(ColorUtil.colorize(LanguageConfig.COMMAND_HELP));
+                        return true;
+                    }
 
-	@Override
-	public boolean hasChildrens() {
-		return getChildrens().size() > 0;
-	}
+                    sender.sendMessage(getCommandHandler().getConfig().getNoPermissionsMessage());
+                    return true;
+                }
 
-	@Override
-	public CommandContext findChildren(ArgumentFormatter formatter) {
-		if(formatter.getArguments().size() > 0) {
-            String trySub = formatter.getArguments().get(0);
-            if(hasChildren(trySub)) {
-            	formatter.getArguments().remove(0);
-            	
-            	CommandContext context = this.getChildren(trySub);
-                
-                return context.findChildren(formatter);
+                if (getSenderClass().equals(Player.class) && sender instanceof ConsoleCommandSender) {
+                    sender.sendMessage(ColorUtil.colorize(LanguageConfig.COMMAND_ONLY_PLAYERS));
+                    return true;
+                }
+
+                if (getSenderClass().equals(ConsoleCommandSender.class) && sender instanceof Player) {
+                    sender.sendMessage(ColorUtil.colorize(LanguageConfig.COMMAND_ONLY_CONSOLE));
+                    return true;
+                }
+
+                usable.sort(Comparator.comparing(CommandContext::getFullLabel));
+
+                sender.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "----------------------------------------------------------------");
+                usable.forEach(node -> {
+                    String usage = (sender instanceof Player ? "/" : "") + node.getUsage(node.getFullLabel()).substring(7);
+
+                    usage += getCommandHandler().getConfig().getColor() + usage.trim() + "&f, &7(" + node.getDescription() + ")";
+
+                    sender.sendMessage(ColorUtil.colorize(usage));
+                });
+
+                sender.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "----------------------------------------------------------------");
+                return true;
+            }
+            sender.sendMessage(SpigotConfig.unknownCommandMessage);
+            return true;
+        }
+
+        List<ProviderData> realParameters = new ArrayList<>();
+        for (Data data : parameters) {
+            if (data instanceof ProviderData) {
+                realParameters.add((ProviderData) data);
             }
         }
-        
-        return this;
-	}
-
-	@Override
-	public UsageGenerator getUsageGenerator() {
-		return new InternalUsageGenerator(getParameters());
-	}
-
-	@Override
-	public String getUsageForHelpTopic() {
-		if (this.method != null && this.parameters != null) {
-            return "/" + this.getFullLabel() + " " + getUsageGenerator().generate();
+        List<String> unusedArguments = new ArrayList<>(args);
+        List<ProviderData> defaultsUsed = new ArrayList<>();
+        Map<Integer, Object> objects = new HashMap<>();
+        objects.put(0, sender);
+        int index = 0;
+        for (Data parameter : parameters) {
+            if (parameter instanceof FlagData) {
+                FlagData data = (FlagData) parameter;
+                boolean value = data.isDefaultValue();
+                for (String name : data.getNames()) {
+                    if (flags.contains(name.toLowerCase())) {
+                        value = !value;
+                    }
+                }
+                objects.put(data.getIndex(), value);
+            } else if (parameter instanceof ProviderData) {
+                ProviderData data = (ProviderData) parameter;
+                String argument;
+                if ((!data.getDefaultValue().isEmpty()) && (args.size() < realParameters.size())) {
+                    argument = data.getDefaultValue();
+                    
+                    try {
+						Object parsed = data.getProvider().provide(sender, argument);
+						if (parsed == null) {
+	                        return true;
+	                    }
+						
+						objects.put(data.getIndex() + 1, parsed);
+	                    defaultsUsed.add(data);
+	                    continue;
+					} catch (ProviderException e) {
+						sender.sendMessage(e.getLocalizedMessage());
+						return true;
+					}
+                } else {
+                    try {
+                        argument = args.get(index);
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+                unusedArguments.remove(argument);
+                if ((data.isWildCard()) && (!args.isEmpty()) /*|| (argument.equals(data.getDefaultValue()))*/) {
+                    argument = StringUtils.join(args.toArray(new String[0]), " ", index, args.size());
+                }
+                if (data.getProvider() == null) {
+                    sender.sendMessage(ChatColor.RED + "Could not find a Provider to parse " + data.getType().getName() + "." +
+                            " Please contact the server administration if this continues to happen.");
+                    return true;
+                }
+                
+                try {
+                	Object parsed = data.getProvider().provide(sender, argument);
+                    if (parsed == null) {
+                        return true;
+                    }
+                    objects.put(data.getIndex() + 1, parsed);
+				} catch (ProviderException e) {
+					sender.sendMessage(e.getLocalizedMessage());
+					return true;
+				}
+            }
+            index++;
         }
-        
-        return "";
+
+        index = 0;
+        for (ProviderData data : defaultsUsed) {
+            String argument;
+            try {
+                argument = unusedArguments.get(index);
+            } catch (Exception e) {
+                continue;
+            }
+            
+            try {
+            	Object parsed = data.getProvider().provide(sender, argument);
+                if (parsed == null) {
+                    continue;
+                }
+                objects.put(data.getIndex() + 1, parsed);
+                index++;
+			} catch (ProviderException e) {
+				sender.sendMessage(e.getLocalizedMessage());
+				return true;
+			}
+        }
+
+        try {
+        	method.invoke(object, objects.values().toArray());
+            return true;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return false;
 	}
 
-	@Override
-	public CommandExecutor getCommandExecutor() {
-		InternalCommandExecutor commandExecutor = new InternalCommandExecutor(this, commandHandler);
-		return commandExecutor;
-	}
 }

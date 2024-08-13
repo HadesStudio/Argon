@@ -1,83 +1,85 @@
 package dev.rage.argon.util.command;
 
-import dev.rage.argon.util.command.provider.ProviderData;
-import net.md_5.bungee.api.chat.TextComponent;
+import dev.rage.argon.util.command.data.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-public interface CommandContext {
+@Getter @Setter
+@RequiredArgsConstructor
+public abstract class CommandContext {
+	
+	private final CommandHandler commandHandler;
+    private final Class<?> senderClass;
 
-	String getName();
+	protected Method method;
+    protected Object object;
+    
+    private String label = "";
+    private List<String> aliases = new ArrayList<>();
+    private String permission;
+    private String description = "No description!";
+    private boolean async;
+    private boolean hidden;
 
-	void setName(String name);
-	
-    Set<String> getAliases();
+    private CommandContext parent;
+    
+    protected List<CommandContext> childs = new ArrayList<>();
+    protected List<Data> parameters = new ArrayList<>();
+    protected List<String> flags = new ArrayList<>();
 
-    String getPermission();
-	
-    void setPermission(String permission);
+    public void registerChild(CommandContext child) {
+    	child.setParent(this);
+        childs.add(child);
+    }
     
-    boolean hasPermission();
-    
-    String getDescription();
-    
-    void setDescription(String description);
+    public CommandContext getChild(String name) {
+    	for (CommandContext child : childs) {
+            if (child.getLabel().equalsIgnoreCase(name)
+                    || child.getAliases().contains(name))
+                return child;
+        }
 
-    boolean hasDescription();
+        return null;
+    }
     
-    boolean isAsync();
+    public CommandContext findContext(List<String> args) {
+    	if (args.size() > 0) {
+            String s = args.get(0);
+            if (getChild(s) != null) {
+                args.remove(s);
+                return getChild(s).findContext(args);
+            }
+        }
+        return this;
+    }
     
-    void setAsync(boolean async);
+    public boolean canUse(CommandSender sender) {
+        if (permission != null && !permission.isEmpty()) {
+            switch (permission.toLowerCase()) {
+                case "console":
+                    return (sender instanceof ConsoleCommandSender);
+                case "op":
+                    return sender.isOp();
+                default:
+                    return sender.hasPermission(permission);
+            }
+        }
+
+        return true;
+    }
     
-    boolean isHidden();
+    public abstract String getUsage(String realLabel);
     
-    void setHidden(boolean hidden);
+    public abstract boolean execute(CommandSender sender, List<String> args, List<String> flags);
     
-    boolean isRoot();
-    
-    void setRoot(boolean root);
-    
-    Method getMethod();
-    
-    void setMethod(Method method);
-    
-    Class<?> getOwningClass();
-    
-    Class<?> getSenderClass();
-    
-    List<ProviderData> getParameters();
-    
-    void setParameters(List<ProviderData> parameters);
-    
-    Map<String, CommandContext> getChildrens();
-    
-    CommandContext getRootContext();
-    
-    void setRootContext(CommandContext commandContext);
-    
-	Set<String> getRealAliases();
-	
-	String getFullLabel();
-	
-	List<TextComponent> getHelp(CommandSender sender, boolean print);
-	
-	void registerChildren(CommandContext commandContext);
-	
-	boolean hasChildren(String name);
-	
-	CommandContext getChildren(String name);
-	
-	boolean hasChildrens();
-	
-	CommandContext findChildren(ArgumentFormatter formatter);
-		
-	UsageGenerator getUsageGenerator();
-	
-	String getUsageForHelpTopic();
-	
-	CommandExecutor getCommandExecutor();
+    public String getFullLabel() {
+        return parent != null ? parent.getFullLabel() + " " + label : label;
+    }
 }

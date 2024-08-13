@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 public class ArgonCommand {
 
     @Command(names = "argon reload", permission = "argon.command.reload", description = "Reloads all config files")
-    public static void reload(CommandSender sender) {
+    public void reload(CommandSender sender) {
         LanguageConfig.INSTANCE.reload();
         MenusConfig.INSTANCE.reload();
         SettingsConfig.INSTANCE.reload();

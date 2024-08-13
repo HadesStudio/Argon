@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 public class ProfileCommands {
 
     @Command(names = "mykeys")
-    public static void mykeys(Player player) {
+    public void mykeys(Player player) {
         new CrateViewOwnMenu().openMenu(player);
     }
 }

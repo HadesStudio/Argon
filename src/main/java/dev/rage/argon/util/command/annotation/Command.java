@@ -6,16 +6,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD })
+@Target(ElementType.METHOD)
 public @interface Command {
-	
-	boolean async() default false;
-	
+
     String[] names();
-    
-    String description() default "No provided description";
-    
+
     String permission() default "";
-    
+
+    boolean async() default false;
+
     boolean hidden() default false;
+
+    String description() default "No description!";
+
 }

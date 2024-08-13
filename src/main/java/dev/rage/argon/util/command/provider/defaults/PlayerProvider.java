@@ -1,7 +1,5 @@
-package dev.rage.argon.util.command.provider.impl;
+package dev.rage.argon.util.command.provider.defaults;
 
-import com.google.common.collect.Lists;
-import dev.rage.argon.util.BukkitUtil;
 import dev.rage.argon.util.JavaUtil;
 import dev.rage.argon.util.command.provider.Provider;
 import dev.rage.argon.util.command.provider.exception.ProviderException;
@@ -11,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayerProvider implements Provider<Player> {
 
@@ -36,15 +35,7 @@ public class PlayerProvider implements Provider<Player> {
 	}
 
 	@Override
-	public List<String> suggest(CommandSender sender, String source) {
-		List<String> completions = Lists.newArrayList();
-		
-		for (Player player : BukkitUtil.getOnlinePlayers()) {
-			if (match(player.getName(), source)) {
-				completions.add(player.getName());
-			}
-		}
-		
-		return completions;
+	public List<String> suggest(CommandSender sender, List<String> flags) {
+		return Bukkit.getServer().getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
 	}
 }

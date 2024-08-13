@@ -65,7 +65,7 @@ public class LanguageConfig extends ConfigCreator {
     public static String COMMAND_NO_PERMISSION = "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is in error.";
 
     @Path(id = "misc.command.usage")
-    public static String COMMAND_USAGE_FORMAT = "&cUsage:";
+    public static String COMMAND_USAGE_FORMAT = "Usage: ";
 
     @Path(id = "misc.command.help")
     public static String COMMAND_HELP = "Unknown command type '/help' to get help.";

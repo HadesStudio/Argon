@@ -1,4 +1,4 @@
-package dev.rage.argon.util.command.provider.impl.enums;
+package dev.rage.argon.util.command.provider.defaults.enums;
 
 import dev.rage.argon.util.command.binding.Binding;
 import dev.rage.argon.util.command.provider.Provider;

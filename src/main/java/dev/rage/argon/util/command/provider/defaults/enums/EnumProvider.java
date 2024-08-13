@@ -1,11 +1,11 @@
-package dev.rage.argon.util.command.provider.impl.enums;
+package dev.rage.argon.util.command.provider.defaults.enums;
 
-import com.google.common.collect.Lists;
 import dev.rage.argon.util.command.provider.Provider;
 import dev.rage.argon.util.command.provider.exception.ProviderException;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,8 +25,8 @@ public class EnumProvider<E extends Enum<E>> implements Provider<E> {
 	}
 	
 	@Override
-	public List<String> suggest(CommandSender sender, String source) {
-		List<String> completions = Lists.newArrayList();
+	public List<String> suggest(CommandSender sender, List<String> flags) {
+		List<String> completions = new ArrayList<>();
 		
     	for (E enumConstant : type.getEnumConstants()) {
     		completions.add(enumConstant.name().toLowerCase());

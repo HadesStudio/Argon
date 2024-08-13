@@ -26,13 +26,11 @@ public class CrateProvider implements Provider<Crate> {
     }
 
     @Override
-    public List<String> suggest(CommandSender sender, String source) {
+    public List<String> suggest(CommandSender sender, List<String> flags) {
         List<String> completions = new ArrayList<>();
 
         for (Crate crate : crateHandler.getCrates()) {
-            if (match(crate.getName(), source)) {
-                completions.add(crate.getName());
-            }
+            completions.add(crate.getName());
         }
 
         return completions;

@@ -1,42 +1,40 @@
 package dev.rage.argon.util.command.internal;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import dev.rage.argon.util.command.binding.Binder;
 import dev.rage.argon.util.command.binding.Binding;
 import dev.rage.argon.util.command.binding.BindingBuilder;
 import dev.rage.argon.util.command.provider.Provider;
+import dev.rage.argon.util.command.provider.defaults.ChatColorProvider;
+import dev.rage.argon.util.command.provider.defaults.PlayerProvider;
+import dev.rage.argon.util.command.provider.defaults.UUIDProvider;
+import dev.rage.argon.util.command.provider.defaults.enums.EnumBinding;
 import dev.rage.argon.util.command.provider.exception.ProviderException;
-import dev.rage.argon.util.command.provider.impl.*;
-import dev.rage.argon.util.command.provider.impl.enums.EnumBinding;
-import dev.rage.argon.util.time.Duration;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+
 public class InternalBinder implements Binder {
 
-	private final Map<Class<?>, Binding<?>> bindings = Maps.newConcurrentMap();
+	private final Map<Class<?>, Binding<?>> bindings = new HashMap<>();
 	
 	public InternalBinder() {
+        bind(String.class).toProvider(new Provider<String>() {
+            @Override
+            public String provide(CommandSender sender, String source) {
+                return source;
+            }
+        });
+
 		bind(ChatColor.class).toProvider(new ChatColorProvider());
-		bind(Duration.class).toProvider(new DurationProvider());
-		bind(Enchantment.class).toProvider(new EnchantmentProvider());
-		bind(GameMode.class).toProvider(new GameModeProvider());
-		bind(ItemStack.class).toProvider(new ItemStackProvider());
-		bind(OfflinePlayer.class).toProvider(new OfflinePlayerProvider());
-		bind(Player.class).toProvider(new PlayerProvider());
-		bind(UUID.class).toProvider(new UUIDProvider());
-		bind(World.class).toProvider(new WorldProvider());
-		
+        bind(Player.class).toProvider(new PlayerProvider());
+        bind(UUID.class).toProvider(new UUIDProvider());
+
 		bindNumber(Integer::parseInt, "Entry '<source>' is not a valid integer.", Integer.class, int.class);
         bindNumber(Float::parseFloat, "Entry '<source>' is not a valid float.", Float.class, float.class);
         bindNumber(Double::parseDouble, "Entry '<source>' is not a valid double.", Double.class, double.class);

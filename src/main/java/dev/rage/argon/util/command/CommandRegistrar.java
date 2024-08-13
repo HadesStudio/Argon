@@ -1,10 +1,18 @@
 package dev.rage.argon.util.command;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public interface CommandRegistrar {
+import java.util.Map;
 
-	void registerObject(JavaPlugin owner, Object object);
+@Getter
+@RequiredArgsConstructor
+public abstract class CommandRegistrar {
+
+	private final Map<String, CommandContext> commands;
 	
-	void registerClass(JavaPlugin owner, Class<?> clazz);
+	public abstract void registerObject(JavaPlugin owner, Object object);
+	
+	public abstract void registerCommand(JavaPlugin owner, CommandContext context);
 }
