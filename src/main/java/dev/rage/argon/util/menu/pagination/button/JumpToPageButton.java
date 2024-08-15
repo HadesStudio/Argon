@@ -1,5 +1,6 @@
 package dev.rage.argon.util.menu.pagination.button;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.rage.argon.config.MenusConfig;
 import dev.rage.argon.util.ItemBuilder;
 import dev.rage.argon.util.config.Replacement;
@@ -21,7 +22,7 @@ public class JumpToPageButton extends Button {
 	
 	@Override
 	public ItemStack getButtonItem(Player player) {
-		ItemBuilder itemBuilder = new ItemBuilder(current ? Material.ENCHANTED_BOOK : Material.BOOK);
+		ItemBuilder itemBuilder = new ItemBuilder(current ? XMaterial.ENCHANTED_BOOK.parseMaterial() : XMaterial.BOOK.parseMaterial());
 
 		Replacement replacement = new Replacement(MenusConfig.PAGE_BUTTON_TITLE);
 		replacement.add("<page>", page);

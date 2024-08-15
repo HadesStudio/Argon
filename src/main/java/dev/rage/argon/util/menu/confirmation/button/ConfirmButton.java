@@ -1,5 +1,6 @@
 package dev.rage.argon.util.menu.confirmation.button;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.rage.argon.config.MenusConfig;
 import dev.rage.argon.util.Callback;
 import dev.rage.argon.util.ItemBuilder;
@@ -20,9 +21,8 @@ public class ConfirmButton extends Button {
     
     @Override
     public ItemStack getButtonItem(Player player) {
-    	ItemBuilder itemBuilder = new ItemBuilder(Material.WOOL);
+    	ItemBuilder itemBuilder = new ItemBuilder(confirm ? XMaterial.LIME_WOOL.parseItem() : XMaterial.RED_WOOL.parseItem());
     	itemBuilder.setName(confirm ? MenusConfig.CONFIRM_BUTTON_TITLE : MenusConfig.CANCEL_BUTTON_TITLE);
-    	itemBuilder.setDurability(confirm ? 5 : 14);
 
         return itemBuilder.build();
     }

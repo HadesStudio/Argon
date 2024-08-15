@@ -183,11 +183,8 @@ public class ItemBuilder {
 	public ItemBuilder setSkullTexture(String texture) {
 		SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
-		texture = "http://textures.minecraft.net/texture/" + texture;
-		byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", texture).getBytes());
-
-		GameProfile profile = new GameProfile(UUID.randomUUID(), "MHF_HEAD");
-		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
+		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+		profile.getProperties().put("textures", new Property("textures", texture));
 
 		Reflection.getField(skullMeta.getClass(), "profile", GameProfile.class).set(skullMeta, profile);
 

@@ -1,8 +1,10 @@
 package dev.rage.argon.util;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.rage.argon.util.version.ServerVersion;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,11 +17,6 @@ import java.util.stream.StreamSupport;
 
 @UtilityClass
 public class ColorUtil {
-	
-	private final List<ChatColor> WOOL_COLORS = Arrays.asList(ChatColor.WHITE, ChatColor.GOLD, ChatColor.LIGHT_PURPLE,
-			ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN, ChatColor.LIGHT_PURPLE, ChatColor.DARK_GRAY,
-			ChatColor.GRAY, ChatColor.DARK_AQUA, ChatColor.DARK_PURPLE, ChatColor.BLUE, ChatColor.BLACK,
-			ChatColor.DARK_GREEN, ChatColor.RED);
 
 	public String colorize(String input) {
 
@@ -58,14 +55,14 @@ public class ColorUtil {
 	}
 
 	public String[] colorize(String... strings) {
-		return colorize(Arrays.asList(strings)).stream().toArray(String[]::new);
+		return colorize(Arrays.asList(strings)).toArray(new String[0]);
 	}
 
 	public ChatColor getChatColorFromString(String value) {
 
 		try {
 			return ChatColor.valueOf(value.toUpperCase());
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 
 		return ChatColor.WHITE;
@@ -105,23 +102,38 @@ public class ColorUtil {
 		return null;
 	}
 
-	public int getWoolColorFromChatColor(ChatColor color) {
-		if (color == ChatColor.DARK_RED) {
-			color = ChatColor.RED;
+	public ItemStack getWoolFromChatColor(ChatColor color) {
+		switch (color) {
+			case RED:
+			case DARK_RED:
+				return XMaterial.RED_WOOL.parseItem();
+			case YELLOW:
+				return XMaterial.YELLOW_WOOL.parseItem();
+			case GRAY:
+				return XMaterial.LIGHT_GRAY_WOOL.parseItem();
+			case AQUA:
+				return XMaterial.LIGHT_BLUE_WOOL.parseItem();
+			case BLUE:
+			case DARK_BLUE:
+				return XMaterial.BLUE_WOOL.parseItem();
+			case GOLD:
+				return XMaterial.ORANGE_WOOL.parseItem();
+			case BLACK:
+				return XMaterial.BLACK_WOOL.parseItem();
+			case GREEN:
+				return XMaterial.LIME_WOOL.parseItem();
+			case DARK_AQUA:
+				return XMaterial.CYAN_WOOL.parseItem();
+			case DARK_GRAY:
+				return XMaterial.GRAY_WOOL.parseItem();
+			case DARK_GREEN:
+				return XMaterial.GREEN_WOOL.parseItem();
+			case DARK_PURPLE:
+				return XMaterial.PURPLE_WOOL.parseItem();
+			case LIGHT_PURPLE:
+				return XMaterial.PINK_WOOL.parseItem();
 		}
 
-		if (color == ChatColor.DARK_BLUE) {
-			color = ChatColor.BLUE;
-		}
-
-		return WOOL_COLORS.indexOf(color);
-	}
-
-	public net.md_5.bungee.api.ChatColor toBungeeColor(ChatColor color) {
-		return net.md_5.bungee.api.ChatColor.valueOf(color.name());
-	}
-
-	public ChatColor toBukkitColor(net.md_5.bungee.api.ChatColor color) {
-		return ChatColor.valueOf(color.name());
+		return XMaterial.WHITE_WOOL.parseItem();
 	}
 }

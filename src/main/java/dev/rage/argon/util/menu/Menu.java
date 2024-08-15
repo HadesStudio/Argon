@@ -1,5 +1,6 @@
 package dev.rage.argon.util.menu;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.Maps;
 import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.util.ColorUtil;
@@ -27,22 +28,11 @@ public abstract class Menu {
 	private boolean updateAfterClick = true;
 	private boolean closedByMenu = false;
 	private boolean placeholder = false;
-	private Button placeholderButton = Button.placeholder(Material.STAINED_GLASS_PANE, (byte) ColorUtil.getWoolColorFromChatColor(SettingsConfig.PRIMARY_COLOR), " ");
+	private Button placeholderButton = Button.placeholder(XMaterial.BLACK_STAINED_GLASS_PANE.parseMaterial(), (byte) 0, " ");
 
 	private ItemStack createItemStack(Player player, Button button) {
-		ItemStack item = button.getButtonItem(player);
 
-		if (item.getType() != Material.SKULL_ITEM) {
-			ItemMeta meta = item.getItemMeta();
-
-			if (meta != null && meta.hasDisplayName()) {
-				meta.setDisplayName(meta.getDisplayName() + "§b§c§d§e");
-			}
-
-			item.setItemMeta(meta);
-		}
-
-		return item;
+		return button.getButtonItem(player);
 	}
 
 	public void openMenu(final Player player) {

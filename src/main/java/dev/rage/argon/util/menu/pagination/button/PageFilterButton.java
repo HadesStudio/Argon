@@ -1,5 +1,6 @@
 package dev.rage.argon.util.menu.pagination.button;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.Lists;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.MenusConfig;
@@ -62,7 +63,7 @@ public class PageFilterButton<T> extends Button {
 		Replacement replacement = new Replacement(MenusConfig.FILTERS_BUTTON_TITLE);
 		replacement.add("<filter-count>", menu.getFilters().size());
 
-		return new ItemBuilder(Material.HOPPER)
+		return new ItemBuilder(XMaterial.HOPPER.parseMaterial())
 				.setName(replacement.toString())
 				.setLore(lore)
 				.build();

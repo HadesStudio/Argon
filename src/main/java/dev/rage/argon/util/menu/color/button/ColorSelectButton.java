@@ -22,8 +22,8 @@ public class ColorSelectButton extends Button {
 
 	@Override
 	public ItemStack getButtonItem(Player player) {
-		return new ItemBuilder(Material.WOOL).setName(color + TextUtil.formatPretty(color.name()))
-				.setDurability(ColorUtil.getWoolColorFromChatColor(color)).setLore("", " &eClick to select color", " ")
+		return new ItemBuilder(ColorUtil.getWoolFromChatColor(color)).setName(color + TextUtil.formatPretty(color.name()))
+				.setLore("", " &eClick to select color", " ")
 				.build();
 	}
 

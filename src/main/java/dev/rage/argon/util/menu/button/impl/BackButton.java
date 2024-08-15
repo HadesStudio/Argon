@@ -1,5 +1,6 @@
 package dev.rage.argon.util.menu.button.impl;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.rage.argon.config.MenusConfig;
 import dev.rage.argon.util.ItemBuilder;
 import dev.rage.argon.util.menu.Menu;
@@ -16,7 +17,7 @@ public class BackButton extends Button {
     
     public BackButton(Menu back) {
         this.back = back;
-        this.backItem = new ItemStack(Material.BED);
+        this.backItem = XMaterial.RED_BED.parseItem();
     }
     
     public BackButton(Menu back, ItemStack backItem) {

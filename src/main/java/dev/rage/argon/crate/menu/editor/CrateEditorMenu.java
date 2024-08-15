@@ -110,14 +110,13 @@ public class CrateEditorMenu extends Menu {
 		
 		buttons.put(9, new CrateEditButton(
 				crate,
-				new ItemBuilder(Material.WOOL)
+				new ItemBuilder(ColorUtil.getWoolFromChatColor(crate.getColor()))
 				.setName(SettingsConfig.SECONDARY_COLOR + "Current Color&7: &r" + crate.getColor() + TextUtil.formatPretty(crate.getColor().name()))
 				.setLore(
 						"",
 						" &7» &eClick to edit color &7«",
 						""
 						)
-				.setDurability(ColorUtil.getWoolColorFromChatColor(crate.getColor()))
 				.build(),
 				(crate) -> new ColorListMenu(crate::setColor, this).openMenu(player)
 		));
