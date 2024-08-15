@@ -115,9 +115,9 @@ public class InternalCommandContext extends CommandContext {
 
                 sender.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "----------------------------------------------------------------");
                 usable.forEach(node -> {
-                    String usage = (sender instanceof Player ? "/" : "") + node.getUsage(node.getFullLabel()).substring(7);
+                    String usage = getCommandHandler().getConfig().getColor() + (sender instanceof Player ? "/" : "") + node.getUsage(node.getFullLabel()).substring(7);
 
-                    usage += getCommandHandler().getConfig().getColor() + usage.trim() + "&f, &7(" + node.getDescription() + ")";
+                    usage += "&f, &7(" + node.getDescription() + ")";
 
                     sender.sendMessage(ColorUtil.colorize(usage));
                 });

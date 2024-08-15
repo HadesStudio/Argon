@@ -183,44 +183,59 @@ public class BukkitCommandRegistrar extends CommandRegistrar {
         }
 	}
 
-	@Override
-	public void registerCommand(JavaPlugin owner, CommandContext context) {
-		InternalCommandExecutor commandExecutor = new InternalCommandExecutor(context, owner);
+    @Override
+    public void registerCommand(JavaPlugin owner, CommandContext context) {
+        InternalCommandExecutor commandExecutor = new InternalCommandExecutor(context, owner);
 
         getCommands().put(context.getLabel().toLowerCase(), context);
         context.getAliases().forEach(alias -> getCommands().put(alias.toLowerCase(), context));
 
-        PluginCommand pluginCommand = getPluginCommand(owner, commandExecutor.getContext().getLabel());
-        
-        pluginCommand.setExecutor(commandExecutor);
-        pluginCommand.setTabCompleter(commandExecutor);
-        pluginCommand.setAliases(context.getAliases());
-        pluginCommand.setDescription(context.getDescription());
-        
-        getCommandMap().register(owner.getDescription().getName(), pluginCommand);
-	}
-	
-	private CommandMap getCommandMap() {
-		try {
-			Server server = Bukkit.getServer();
-			Field field = server.getClass().getDeclaredField("commandMap");
-			field.setAccessible(true);
+        PluginCommand pluginCommand = getPluginCommmand(commandExecutor, owner);
+        if (pluginCommand != null) {
+            pluginCommand.setExecutor(commandExecutor);
+            pluginCommand.setTabCompleter(commandExecutor);
+            setFieldValue(pluginCommand, "aliases", context.getAliases());
+            setFieldValue(pluginCommand, "activeAliases", context.getAliases());
+            setFieldValue(pluginCommand, "usageMessage", "");
+            setFieldValue(pluginCommand, "description", context.getDescription());
+            if (getCommandMap().register(owner.getName(), pluginCommand))
+                BroadcastUtil.sendConsole("Registered command " + context.getFullLabel());
+        } else {
+            BroadcastUtil.sendConsole("Failed to register command " + context.getFullLabel());
+        }
+    }
 
-			return (CommandMap) field.get(server);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	private PluginCommand getPluginCommand(JavaPlugin plugin, String name) {
-        PluginCommand command = null;
+    private CommandMap getCommandMap() {
         try {
-            Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            Server server = Bukkit.getServer();
+            Field field = server.getClass().getDeclaredField("commandMap");
+            field.setAccessible(true);
+
+            return (CommandMap) field.get(server);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static PluginCommand getPluginCommmand(InternalCommandExecutor command, JavaPlugin plugin) {
+        try {
+            Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class,
+                    Plugin.class);
             constructor.setAccessible(true);
-            command = constructor.newInstance(name, plugin);
-        }  catch (SecurityException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException | IllegalArgumentException e) {
+            return constructor.newInstance(command.getContext().getLabel(), plugin);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
-        return command;
+        return null;
+    }
+
+    private static void setFieldValue(PluginCommand pluginCommand, String fieldName, Object value) {
+        try {
+            Field field = pluginCommand.getClass().getSuperclass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(pluginCommand, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
