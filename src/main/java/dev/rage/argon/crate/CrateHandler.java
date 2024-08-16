@@ -201,6 +201,8 @@ public class CrateHandler {
     }
 
     public Crate getByItem(ItemStack item) {
+        if (item == null) return null;
+
         if(item.hasItemMeta() && item.getItemMeta().hasLore()) {
             List<String> lore = item.getItemMeta().getLore();
             if (lore.size() > 0) {
@@ -218,6 +220,8 @@ public class CrateHandler {
     }
 
     public boolean isKey(Crate crate, ItemStack item) {
+        if (item == null) return false;
+
         if(item.hasItemMeta() && item.getItemMeta().hasLore()) {
             List<String> lore = item.getItemMeta().getLore();
             if (lore.size() > 0) {
@@ -235,6 +239,8 @@ public class CrateHandler {
     }
 
     public boolean isCrate(ItemStack item) {
+        if (item == null) return false;
+
         if(item.hasItemMeta() && item.getItemMeta().hasLore()) {
             List<String> lore = item.getItemMeta().getLore();
             if (lore.size() > 0) {

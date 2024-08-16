@@ -31,7 +31,10 @@ public class CrateListener implements Listener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        ItemStack hand = ReflectionUtil.getItemInHand(player);
+        ItemStack hand = ReflectionUtil.getItemInMainHand(player);
+        if (hand == null) {
+            hand = ReflectionUtil.getItemInOffHand(player);
+        }
 
         if(hand != null) {
             if(crateHandler.isCrate(hand)) {
@@ -86,7 +89,11 @@ public class CrateListener implements Listener {
         Action action =  event.getAction();
         Block block = event.getClickedBlock();
 
-        ItemStack hand = ReflectionUtil.getItemInHand(player);
+        ItemStack hand = ReflectionUtil.getItemInMainHand(player);
+        if (hand == null) {
+            hand = ReflectionUtil.getItemInOffHand(player);
+        }
+
         Profile profile = ArgonPlugin.get().getProfileHandler().getProfile(player);
         Crate crate = crateHandler.getByKey(hand);
 

@@ -28,12 +28,21 @@ public class ReflectionUtil {
         return ServerVersion.UNKNOWN;
     }
 
-    public ItemStack getItemInHand(Player player) {
+    public ItemStack getItemInMainHand(Player player) {
         PlayerInventory inventory = player.getInventory();
         if (getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9)) {
             return inventory.getItemInHand();
         }
 
         return (ItemStack) Reflection.getMethod(PlayerInventory.class, "getItemInMainHand").invoke(inventory);
+    }
+
+    public ItemStack getItemInOffHand(Player player) {
+        PlayerInventory inventory = player.getInventory();
+        if (getServerVersion().isAfter(ServerVersion.MINECRAFT_1_8)) {
+            return (ItemStack) Reflection.getMethod(PlayerInventory.class, "getItemInOffHand").invoke(inventory);
+        }
+
+        return null;
     }
 }
