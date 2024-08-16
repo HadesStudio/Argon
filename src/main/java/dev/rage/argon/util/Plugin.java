@@ -1,6 +1,7 @@
 package dev.rage.argon.util;
 
 import dev.rage.argon.ArgonPlugin;
+import dev.rage.argon.box.BoxHandler;
 import dev.rage.argon.command.ArgonCommand;
 import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.MenusConfig;
@@ -86,12 +87,11 @@ public class Plugin {
                     ArgonPlugin.get().setHologramHandler(new HologramHandler());
                     ArgonPlugin.get().setCrateHandler(new CrateHandler(ArgonPlugin.getPlugin()));
                     ArgonPlugin.get().setProfileHandler(new ProfileHandler(ArgonPlugin.getPlugin()));
+                    ArgonPlugin.get().setBoxHandler(new BoxHandler(ArgonPlugin.getPlugin()));
 
                     ArgonPlugin.get().getCommandHandler().register(new ArgonCommand());
 
-                    PluginManager pluginManager = ArgonPlugin.getPlugin().getServer().getPluginManager();
-
-                    pluginManager.registerEvents(new MenuListener(ArgonPlugin.getPlugin()), ArgonPlugin.getPlugin());
+                    Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(ArgonPlugin.getPlugin()), ArgonPlugin.getPlugin());
 
                     ArgonPlugin.getPlugin().getServer().getScheduler().runTaskTimer(ArgonPlugin.getPlugin(), new MenuUpdateRunnable(), 10L, 10L);
                 }

@@ -1,6 +1,7 @@
 package dev.rage.argon.util;
 
 import dev.rage.argon.ArgonPlugin;
+import dev.rage.argon.box.BoxHandler;
 import dev.rage.argon.crate.CrateHandler;
 import dev.rage.argon.hologram.HologramHandler;
 import dev.rage.argon.profile.ProfileHandler;
@@ -19,6 +20,7 @@ public class Argon {
     private CrateHandler crateHandler;
     private ProfileHandler profileHandler;
     private HologramHandler hologramHandler;
+    private BoxHandler boxHandler;
 
     private Config licenseFile;
 
