@@ -20,7 +20,9 @@ public abstract class Button {
             public ItemStack getButtonItem(Player player) {
         		ItemBuilder itemBuilder = new ItemBuilder(material);
         		itemBuilder.setName(title);
-        		itemBuilder.setDurability(data);
+        		if (data != -1) {
+                    itemBuilder.setDurability(data);
+                }
 
                 return itemBuilder.build();
             }
