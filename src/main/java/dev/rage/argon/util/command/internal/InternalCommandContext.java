@@ -117,7 +117,7 @@ public class InternalCommandContext extends CommandContext {
                 usable.forEach(node -> {
                     String usage = getCommandHandler().getConfig().getColor() + (sender instanceof Player ? "/" : "") + node.getUsage(node.getFullLabel()).substring(7);
 
-                    usage += "&f, &7(" + node.getDescription() + ")";
+                    usage = usage.trim() + "&f, &7(" + node.getDescription() + ")";
 
                     sender.sendMessage(ColorUtil.colorize(usage));
                 });
