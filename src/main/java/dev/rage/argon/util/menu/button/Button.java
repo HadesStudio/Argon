@@ -13,16 +13,13 @@ import java.util.List;
 
 public abstract class Button {
 	
-    public static Button placeholder(Material material, byte data, String title) {
+    public static Button placeholder(ItemStack itemStack, String title) {
         return new Button() {
 
         	@Override
             public ItemStack getButtonItem(Player player) {
-        		ItemBuilder itemBuilder = new ItemBuilder(material);
+        		ItemBuilder itemBuilder = new ItemBuilder(itemStack);
         		itemBuilder.setName(title);
-        		if (data != -1) {
-                    itemBuilder.setDurability(data);
-                }
 
                 return itemBuilder.build();
             }
