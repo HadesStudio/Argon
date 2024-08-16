@@ -198,8 +198,8 @@ public class BukkitCommandRegistrar extends CommandRegistrar {
             setFieldValue(pluginCommand, "activeAliases", context.getAliases());
             setFieldValue(pluginCommand, "usageMessage", "");
             setFieldValue(pluginCommand, "description", context.getDescription());
-            if (getCommandMap().register(owner.getName(), pluginCommand))
-                BroadcastUtil.sendConsole("Registered command " + context.getFullLabel());
+
+            getCommandMap().register(owner.getName(), pluginCommand);
         } else {
             BroadcastUtil.sendConsole("Failed to register command " + context.getFullLabel());
         }
