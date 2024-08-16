@@ -1,5 +1,6 @@
 package dev.rage.argon.util.menu.button;
 
+import com.cryptomorin.xseries.XSound;
 import dev.rage.argon.util.ItemBuilder;
 import dev.rage.argon.util.ReflectionUtil;
 import dev.rage.argon.util.version.ServerVersion;
@@ -27,19 +28,15 @@ public abstract class Button {
     }
     
     public static void playFail(Player player) {
-        player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : Sound.valueOf("BLOCK_GRASS_BREAK")), 20.0f, 0.1f);
+        player.playSound(player.getLocation(), XSound.BLOCK_GRASS_BREAK.parseSound(), 20.0f, 0.1f);
     }
     
     public static void playSuccess(Player player) {
-        player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_12) ? Sound.valueOf("BLOCK_NOTE_PLING") : Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"))), 20.0f, 15.0f);
+        player.playSound(player.getLocation(), XSound.UI_BUTTON_CLICK.parseSound(), 20.0f, 15.0f);
     }
     
     public static void playNeutral(Player player) {
-        player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : Sound.valueOf("BLOCK_LEVER_CLICK")), 20.0f, 1.0f);
-    }
-    
-    public static void play(Player player, Sound sound, float pitch, float volume) {
-    	player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : Sound.valueOf("BLOCK_LEVER_CLICK")), pitch, volume);
+        player.playSound(player.getLocation(), XSound.BLOCK_LEVER_CLICK.parseSound(), 20.0f, 1.0f);
     }
     
     public String getName(Player player) {
