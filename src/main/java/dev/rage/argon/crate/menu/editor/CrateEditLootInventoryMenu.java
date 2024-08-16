@@ -45,7 +45,7 @@ public class CrateEditLootInventoryMenu implements Listener {
 
 		if (inventory != null) {
 			if (inventory != player.getInventory()) {
-				if (player.hasPermission("lootchests.command.crate.edit") && title.contains(SettingsConfig.SECONDARY_COLOR + "Editing loot: ")) {
+				if (player.hasPermission("argon.command.crate.edit") && title.contains(SettingsConfig.SECONDARY_COLOR + "Editing loot: ")) {
 					String crateName = ChatColor.stripColor(title.replace(SettingsConfig.SECONDARY_COLOR + "Editing loot: ", ""));
 					Crate crate = ArgonPlugin.get().getCrateHandler().getByName(crateName);
 
