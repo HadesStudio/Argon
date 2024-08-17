@@ -9,6 +9,8 @@ import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.MenusConfig;
 import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.util.Argon;
+import dev.rage.argon.util.ColorUtil;
+import dev.rage.argon.util.ReflectionUtil;
 import dev.rage.argon.util.command.annotation.Command;
 import dev.rage.argon.util.command.annotation.Param;
 import org.bukkit.command.CommandSender;
@@ -21,6 +23,11 @@ public class ArgonCommand {
         LanguageConfig.INSTANCE.reload();
         MenusConfig.INSTANCE.reload();
         SettingsConfig.INSTANCE.reload();
+    }
+
+    @Command(names = "argon checkversion", permission = "argon.command.checkspigot", description = "Checks spigot NMS version")
+    public void checkversion(CommandSender sender) {
+        sender.sendMessage(ColorUtil.colorize("&aArgon is running for: &r" + ReflectionUtil.getServerVersion().getName()));
     }
 
     @Command(names = "lootbox give luckyblock", permission = "argon.command.lootbox.give.luckyblock", description = "Gives a lucky block")
