@@ -110,7 +110,7 @@ public class BoxHandler {
     }
 
     public boolean giveLuckyBlock(Player player, int amount) {
-        ItemBuilder builder = new ItemBuilder(LootItem.LUCKY_BLOCK_ITEM).setAmount(amount);
+        ItemBuilder builder = new ItemBuilder(LootItem.LUCKY_BLOCK_ITEM.clone()).setAmount(amount);
         builder.setName(SettingsConfig.LUCKY_BLOCK_NAME);
 
         List<String> lore = new ArrayList<>();

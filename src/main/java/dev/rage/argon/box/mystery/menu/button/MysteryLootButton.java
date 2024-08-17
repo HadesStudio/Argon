@@ -23,7 +23,7 @@ public class MysteryLootButton extends Button {
             return mysteryLoot.getReward();
         }
 
-        ItemBuilder builder = new ItemBuilder(opLoot ? LootItem.LUCKY_BLOCK_ITEM : LootItem.MYSTERY_BOX_ITEM);
+        ItemBuilder builder = new ItemBuilder(opLoot ? LootItem.LUCKY_BLOCK_ITEM.clone() : LootItem.MYSTERY_BOX_ITEM.clone());
         builder.setAmount(1);
         builder.setName((opLoot ? "&6&l" : "&c") + "???");
         return builder.build();
