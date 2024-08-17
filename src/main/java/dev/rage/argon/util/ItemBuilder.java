@@ -3,6 +3,8 @@ package dev.rage.argon.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +12,8 @@ import java.util.UUID;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.rage.argon.util.reflect.Reflection;
+import dev.rage.argon.util.version.ServerVersion;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -180,13 +184,30 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder setSkullTexture(String texture) {
+	public ItemBuilder setSkullTexture(String urlHead, String texture) {
 		SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
-		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-		profile.getProperties().put("textures", new Property("textures", texture));
+		UUID id = UUID.randomUUID();
+		if (ReflectionUtil.getServerVersion().isAfter(ServerVersion.MINECRAFT_1_16_4)) {
+			Class<?> PLAYER_PROFILE_CLASS = Reflection.getClass("org.bukkit.profile.PlayerProfile");
+			Class<?> PLAYER_TEXTURES_CLASS = Reflection.getClass("org.bukkit.profile.PlayerTextures");
 
-		Reflection.getField(skullMeta.getClass(), "profile", GameProfile.class).set(skullMeta, profile);
+			Object playerProfile = Reflection.getMethod(Bukkit.class, "createPlayerProfile", UUID.class).invoke(null, id);
+			Object playerTextures = Reflection.getMethod(PLAYER_PROFILE_CLASS, "getTextures").invoke(playerProfile);
+
+			try {
+				URL url = new URL("http://textures.minecraft.net/texture/" + urlHead);
+				Reflection.getMethod(PLAYER_TEXTURES_CLASS, "setSkin", URL.class).invoke(playerTextures, url);
+			} catch (MalformedURLException e) {e.printStackTrace();}
+
+			Reflection.getMethod(PLAYER_PROFILE_CLASS, "setTextures", PLAYER_TEXTURES_CLASS).invoke(playerProfile, playerTextures);
+			Reflection.getMethod(skullMeta.getClass(), "setOwnerProfile", PLAYER_PROFILE_CLASS).invoke(skullMeta, playerProfile);
+		} else {
+			GameProfile profile = new GameProfile(id, null);
+			profile.getProperties().put("textures", new Property("textures", texture));
+
+			Reflection.getField(skullMeta.getClass(), "profile", GameProfile.class).set(skullMeta, profile);
+		}
 
 		itemStack.setItemMeta(skullMeta);
 		return this;
