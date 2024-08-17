@@ -32,11 +32,7 @@ public class BoxListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        ItemStack hand = ReflectionUtil.getItemInMainHand(player);
-        if (hand == null) {
-            hand = ReflectionUtil.getItemInOffHand(player);
-        }
+        ItemStack hand = event.getItemInHand();
 
         if (hand != null) {
             if (boxHandler.isLootBox(hand)) {
@@ -58,6 +54,7 @@ public class BoxListener implements Listener {
         if (block.hasMetadata("luckyblock")) {
             boxHandler.dropLuckyBlockLoot(block.getLocation());
             block.setType(Material.AIR);
+            block.removeMetadata("luckyblock", ArgonPlugin.getPlugin());
             event.setCancelled(true);
         }
     }
@@ -68,10 +65,7 @@ public class BoxListener implements Listener {
         Action action = event.getAction();
 
         if (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR)) {
-            ItemStack hand = ReflectionUtil.getItemInMainHand(player);
-            if (hand == null) {
-                hand = ReflectionUtil.getItemInOffHand(player);
-            }
+            ItemStack hand = event.getItem();
 
             if (hand != null) {
                 if (boxHandler.isMysteryBox(hand)) {
