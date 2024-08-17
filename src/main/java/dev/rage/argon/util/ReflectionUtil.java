@@ -1,48 +1,53 @@
 package dev.rage.argon.util;
 
-import dev.rage.argon.util.reflect.Reflection;
 import dev.rage.argon.util.version.ServerVersion;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 @UtilityClass
 public class ReflectionUtil {
 
-    public String getNmsVersion() {
-        return (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
+    @Getter private static final ServerVersion serverVersion;
+
+    static {
+        serverVersion = findVersion();
     }
 
-    public ServerVersion getServerVersion() {
+    private String getNmsVersion() {
+        try {
+            return (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
+        } catch (Exception ignored) {}
+
+        return Bukkit.getServer().getVersion();
+    }
+
+    public ItemStack getSkullItem() {
+        try {
+            return new ItemStack(Material.valueOf("PLAYER_HEAD"), 1);
+        } catch (Exception e) {
+            return new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
+        }
+    }
+
+
+    private ServerVersion findVersion() {
+        String currentVersion = getNmsVersion();
+        String[] split = currentVersion.split("-");
+
+        String fixedVersion = split[0].replace(".", "_");
+
         for (ServerVersion version : ServerVersion.values()) {
             String name = version.name();
 
             name = name.replace("MINECRAFT_", "v");
             name = (name.length() <= 4 ? name.substring(0, 4) : name.substring(0, 5));
 
-            if (getNmsVersion().contains(name)) return version;
+            if (name.contains(fixedVersion)) return version;
         }
 
         return ServerVersion.UNKNOWN;
-    }
-
-    public ItemStack getItemInMainHand(Player player) {
-        PlayerInventory inventory = player.getInventory();
-        if (getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9)) {
-            return inventory.getItemInHand();
-        }
-
-        return (ItemStack) Reflection.getMethod(PlayerInventory.class, "getItemInMainHand").invoke(inventory);
-    }
-
-    public ItemStack getItemInOffHand(Player player) {
-        PlayerInventory inventory = player.getInventory();
-        if (getServerVersion().isAfter(ServerVersion.MINECRAFT_1_8)) {
-            return (ItemStack) Reflection.getMethod(PlayerInventory.class, "getItemInOffHand").invoke(inventory);
-        }
-
-        return null;
     }
 }

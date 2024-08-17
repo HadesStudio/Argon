@@ -5,6 +5,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ServerVersion {
 
+	MINECRAFT_1_21(767, 40, "1.21"),
+	MINECRAFT_1_20_5(766, 39, "1.20.5 - 1.20.6"),
+	MINECRAFT_1_20_3(765, 38, "1.20.3 - 1.20.4"),
+	MINECRAFT_1_20_2(764, 37, "1.20.2"),
+	MINECRAFT_1_20(763, 36, "1.20 - 1.20.1"),
 	MINECRAFT_1_19_4(762, 35, "1.19.4"),
 	MINECRAFT_1_19_3(761, 34, "1.19.3"),
 	MINECRAFT_1_19_1(760, 33, "1.19.1 - 1.19.2"),
@@ -40,7 +45,7 @@ public enum ServerVersion {
 	MINECRAFT_1_9_1(108, 3, "1.9.1"),
 	MINECRAFT_1_9(107, 2, "1.9"),
 	MINECRAFT_1_8(47, 1,"1.8 - 1.8.9"),
-	UNKNOWN(-1, 0, "Unknown");
+	UNKNOWN(-1, 0, "Not supported!");
 
 	private final int id;
 	private final int orderId;
