@@ -31,10 +31,7 @@ public class CrateListener implements Listener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        ItemStack hand = ReflectionUtil.getItemInMainHand(player);
-        if (hand == null) {
-            hand = ReflectionUtil.getItemInOffHand(player);
-        }
+        ItemStack hand = event.getItemInHand();
 
         if(hand != null) {
             if(crateHandler.isCrate(hand)) {
@@ -89,10 +86,7 @@ public class CrateListener implements Listener {
         Action action =  event.getAction();
         Block block = event.getClickedBlock();
 
-        ItemStack hand = ReflectionUtil.getItemInMainHand(player);
-        if (hand == null) {
-            hand = ReflectionUtil.getItemInOffHand(player);
-        }
+        ItemStack hand = event.getItem();
 
         Profile profile = ArgonPlugin.get().getProfileHandler().getProfile(player);
         Crate crate = crateHandler.getByKey(hand);
@@ -107,7 +101,7 @@ public class CrateListener implements Listener {
                     }
 
                     player.updateInventory();
-                    player.playSound(player.getLocation(), (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_9) ? Sound.CLICK : (ReflectionUtil.getServerVersion().isBefore(ServerVersion.MINECRAFT_1_12) ? Sound.valueOf("BLOCK_NOTE_PLING") : Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"))), 20.0f, 15.0f);
+                    player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 20.0f, 15.0f);
                 }
 
                 event.setCancelled(true);

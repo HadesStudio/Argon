@@ -184,6 +184,8 @@ public class CrateHandler {
     }
 
     public Crate getByKey(ItemStack key) {
+        if (key == null) return null;
+
         if(key.hasItemMeta() && key.getItemMeta().hasLore()) {
             List<String> lore = key.getItemMeta().getLore();
             if (lore.size() > 0) {
