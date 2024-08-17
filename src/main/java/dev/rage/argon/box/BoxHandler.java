@@ -187,7 +187,7 @@ public class BoxHandler {
     }
 
     public boolean giveMysteryBox(Player player, int amount) {
-        ItemBuilder builder = new ItemBuilder(LootItem.MYSTERY_BOX_ITEM).setAmount(amount);
+        ItemBuilder builder = new ItemBuilder(LootItem.MYSTERY_BOX_ITEM.clone()).setAmount(amount);
         builder.setName(SettingsConfig.MYSTERY_BOX_NAME);
 
         List<String> lore = new ArrayList<>();
