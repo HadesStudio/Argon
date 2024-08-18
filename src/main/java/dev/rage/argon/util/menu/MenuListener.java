@@ -25,10 +25,12 @@ public class MenuListener implements Listener {
 		Menu openMenu = Menu.currentlyOpenedMenus.get(player.getName());
 
 		if (openMenu != null) {
-			if (event.getClickedInventory() != null) {
-				if (event.getClickedInventory().equals(player.getInventory())) {
-					event.setCancelled(true);
-					return;
+			if (!openMenu.isEditable()) {
+				if (event.getClickedInventory() != null) {
+					if (event.getClickedInventory().equals(player.getInventory())) {
+						event.setCancelled(true);
+						return;
+					}
 				}
 			}
 

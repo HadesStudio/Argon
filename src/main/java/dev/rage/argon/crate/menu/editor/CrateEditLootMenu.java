@@ -15,7 +15,11 @@ import java.util.Map;
 public class CrateEditLootMenu extends Menu {
 
 	private final Crate crate;
-	
+
+	{
+		setEditable(true);
+	}
+
 	@Override
 	public String getTitle(Player player) {
 		return crate.getColor() + crate.getName() + SettingsConfig.SECONDARY_COLOR + " Loot";

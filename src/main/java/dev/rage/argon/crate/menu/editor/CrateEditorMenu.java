@@ -39,6 +39,7 @@ public class CrateEditorMenu extends Menu {
 
 	{
 		setAutoUpdate(true);
+		setEditable(true);
 	}
 	
 	@Override

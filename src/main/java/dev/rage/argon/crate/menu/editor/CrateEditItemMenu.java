@@ -27,7 +27,11 @@ public class CrateEditItemMenu extends Menu {
 	private final LootItem item;
 
 	public int selectedCommand = 0;
-	
+
+	{
+		setEditable(true);
+	}
+
 	@Override
 	public String getTitle(Player player) {
 		return SettingsConfig.SECONDARY_COLOR + "Editing &f" + item.getItemStack().getType().name();

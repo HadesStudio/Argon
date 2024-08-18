@@ -28,6 +28,7 @@ public abstract class Menu {
 	private boolean updateAfterClick = true;
 	private boolean closedByMenu = false;
 	private boolean placeholder = false;
+	private boolean editable = false;
 	private Button placeholderButton = Button.placeholder(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem(), " ");
 
 	private ItemStack createItemStack(Player player, Button button) {

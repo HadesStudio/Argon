@@ -1,18 +1,11 @@
 package dev.rage.argon.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
-
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.rage.argon.util.reflect.Reflection;
 import dev.rage.argon.util.version.ServerVersion;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -29,9 +22,13 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import com.google.common.collect.Lists;
-
-import lombok.AllArgsConstructor;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 public class ItemBuilder {
@@ -223,7 +220,7 @@ public class ItemBuilder {
             BukkitObjectOutputStream bukkitStream = new BukkitObjectOutputStream(stream);
             
             bukkitStream.writeInt(items.length);
-            
+
             for (int i = 0; i < items.length; ++i) {
                 bukkitStream.writeObject(items[i]);
             }

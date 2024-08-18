@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class CrateLootButton extends Button {
 
-	private LootItem crateItem;
+	private final LootItem crateItem;
 
 	public CrateLootButton(LootItem crateItem) {
 		this.crateItem = crateItem;
