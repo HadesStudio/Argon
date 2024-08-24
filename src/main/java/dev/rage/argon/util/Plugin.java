@@ -7,7 +7,6 @@ import dev.rage.argon.config.LanguageConfig;
 import dev.rage.argon.config.MenusConfig;
 import dev.rage.argon.config.SettingsConfig;
 import dev.rage.argon.crate.CrateHandler;
-import dev.rage.argon.hologram.HologramHandler;
 import dev.rage.argon.profile.ProfileHandler;
 import dev.rage.argon.util.command.bukkit.BukkitCommandHandler;
 import dev.rage.argon.util.menu.MenuListener;
@@ -16,7 +15,6 @@ import dev.rage.argon.util.prompt.PromptHandler;
 import lombok.Getter;
 import okhttp3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -84,7 +82,6 @@ public class Plugin {
                     ArgonPlugin.get().setCommandHandler(new BukkitCommandHandler(ArgonPlugin.getPlugin()));
                     ArgonPlugin.get().setPromptHandler(new PromptHandler(ArgonPlugin.getPlugin()));
 
-                    ArgonPlugin.get().setHologramHandler(new HologramHandler());
                     ArgonPlugin.get().setCrateHandler(new CrateHandler(ArgonPlugin.getPlugin()));
                     ArgonPlugin.get().setProfileHandler(new ProfileHandler(ArgonPlugin.getPlugin()));
                     ArgonPlugin.get().setBoxHandler(new BoxHandler(ArgonPlugin.getPlugin()));

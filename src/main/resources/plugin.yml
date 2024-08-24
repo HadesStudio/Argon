@@ -2,3 +2,5 @@ author: Rage Development Team
 name: Argon
 version: 0.1-STABLE
 main: dev.rage.argon.ArgonPlugin
+softdepend:
+  - DecentHolograms

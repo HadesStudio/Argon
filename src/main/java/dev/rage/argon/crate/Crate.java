@@ -2,13 +2,13 @@ package dev.rage.argon.crate;
 
 import dev.rage.argon.ArgonPlugin;
 import dev.rage.argon.config.LanguageConfig;
-import dev.rage.argon.hologram.Hologram;
 import dev.rage.argon.item.LootItem;
 import dev.rage.argon.util.*;
 import dev.rage.argon.util.config.Replacement;
 import dev.rage.argon.util.config.Serializable;
 import dev.rage.argon.util.config.serialize.defaults.ItemStackSerializer;
 import dev.rage.argon.util.config.serialize.defaults.LocationSerializer;
+import eu.decentsoftware.holograms.api.DHAPI;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -58,7 +58,7 @@ public class Crate implements Serializable<Crate> {
 
         hologramLines = new ArrayList<>();
         hologramLines.add("<crate> &7Crate");
-        hologramLines.add("<empty-line>");
+        hologramLines.add(" ");
         hologramLines.add("&fLeft click to view loot");
         hologramLines.add("&fRight click to open key");
     }
@@ -187,45 +187,39 @@ public class Crate implements Serializable<Crate> {
     }
 
     public void spawnHolograms() {
+        if (!Bukkit.getServer().getPluginManager().isPluginEnabled("DecentHolograms")) return;
+
         locations.forEach(location -> {
             if (hologramLines == null) return;
             if (hologramLines.isEmpty()) return;
 
-            String id = location.getBlockX() + "|" + location.getBlockY() + "|" + location.getBlockZ();
+            String id = "x" + location.getBlockX() + "y" + location.getBlockY() + "z" + location.getBlockZ();
 
-            Hologram hologram = ArgonPlugin.get().getHologramHandler().getHologram(id);
+            eu.decentsoftware.holograms.api.holograms.Hologram hologram = DHAPI.getHologram(id);
+
+            List<String> lines = new ArrayList<>(getHologramLines());
 
             if (hologram == null) {
-                hologram = ArgonPlugin.get().getHologramHandler().createHologram(id, location.clone().add(0.5, -1, 0.5));
+                hologram = DHAPI.createHologram(id, location.clone().add(0.5, (1.35 + (lines.size() * 0.28)), 0.5));
 
-                List<String> lines = new ArrayList<>(getHologramLines());
-
-                Collections.reverse(lines);
-
-                hologram.getAboveLines().clear();
-                for (int i = 0; i < lines.size(); i++) {
-                    if (i == 0) {
-                        hologram.setText(lines.get(0).replace("<crate>", color + name));
-                        continue;
-                    }
-
-                    hologram.addAboveLine(lines.get(i).replace("<crate>", color + name), 0.28);
+                for (String line : lines) {
+                    DHAPI.addHologramLine(hologram, line.replace("<crate>", color + name));
                 }
-
-                hologram.spawnAll();
             } else {
-                hologram.respawnAll();
+                hologram.updateAll();
             }
         });
     }
 
     public void deleteHologram(Location location) {
-        String id = location.getBlockX() + "|" + location.getBlockY() + "|" + location.getBlockZ();
+        if (!Bukkit.getServer().getPluginManager().isPluginEnabled("DecentHolograms")) return;
 
-        Hologram hologram = ArgonPlugin.get().getHologramHandler().getHologram(id);
-        hologram.despawnAll();
+        String id = "x" + location.getBlockX() + "y" + location.getBlockY() + "z" + location.getBlockZ();
 
-        ArgonPlugin.get().getHologramHandler().deleteHologram(id);
+        eu.decentsoftware.holograms.api.holograms.Hologram hologram = DHAPI.getHologram(id);
+        if (hologram != null) {
+            DHAPI.removeHologram(id);
+        }
     }
 
     public void deleteHolograms() {
