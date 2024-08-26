@@ -6,7 +6,7 @@
 
     <groupId>dev.rage.argon</groupId>
     <artifactId>Argon</artifactId>
-    <version>0.1-STABLE</version>
+    <version>0.2-STABLE</version>
     <name>Argon</name>
 
     <properties>
@@ -98,7 +98,7 @@
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
                             <!-- Be sure to change the package below -->
-                            <shadedPattern>dev.rage.argon.shade.xseries</shadedPattern>
+                            <shadedPattern>dev.astro.argon.shade.xseries</shadedPattern>
                         </relocation>
                     </relocations>
 

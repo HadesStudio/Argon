@@ -1,0 +1,48 @@
+package dev.astro.argon.util.menu.confirmation.button;
+
+import com.cryptomorin.xseries.XMaterial;
+import dev.astro.argon.config.MenusConfig;
+import dev.astro.argon.util.Callback;
+import dev.astro.argon.util.ItemBuilder;
+import dev.astro.argon.util.menu.Menu;
+import dev.astro.argon.util.menu.button.Button;
+import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+
+@AllArgsConstructor
+public class ConfirmButton extends Button {
+	
+    private boolean confirm;
+    private Callback<Boolean> callback;
+    private boolean closeAfterResponse;
+    
+    @Override
+    public ItemStack getButtonItem(Player player) {
+    	ItemBuilder itemBuilder = new ItemBuilder(confirm ? XMaterial.LIME_WOOL.parseItem() : XMaterial.RED_WOOL.parseItem());
+    	itemBuilder.setName(confirm ? MenusConfig.CONFIRM_BUTTON_TITLE : MenusConfig.CANCEL_BUTTON_TITLE);
+
+        return itemBuilder.build();
+    }
+    
+    @Override
+    public void clicked(Player player, ClickType clickType) {
+        if (confirm) {
+            Button.playSuccess(player);
+        } else {
+            Button.playFail(player);
+        }
+        
+        if (closeAfterResponse) {
+            Menu menu = Menu.currentlyOpenedMenus.get(player.getName());
+            if (menu != null) {
+                menu.setClosedByMenu(true);
+            }
+            
+            player.closeInventory();
+        }
+        
+        callback.callback(this.confirm);
+    }
+}
