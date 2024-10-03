@@ -9,6 +9,7 @@ import dev.astro.argon.util.ColorUtil;
 import dev.astro.argon.util.ReflectionUtil;
 import dev.astro.argon.util.command.annotation.Command;
 import dev.astro.argon.util.command.annotation.Param;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,24 +27,51 @@ public class ArgonCommand {
         sender.sendMessage(ColorUtil.colorize("&aArgon is running for: &r" + ReflectionUtil.getServerVersion().getName()));
     }
 
+    @Command(names = "lootbox giveall luckyblock", permission = "argon.command.lootbox.giveall.luckyblock", description = "Gives a lucky block to every online player")
+    public void giveallluckyblock(CommandSender sender, @Param(name = "amount", defaultValue = "1") int amount) {
+        Bukkit.getOnlinePlayers().forEach(online -> {
+            ArgonPlugin.get().getBoxHandler().giveLuckyBlock(online, amount);
+        });
+
+        sender.sendMessage(ColorUtil.colorize("&aYou have given x" + amount + " Lucky Block to everyone!"));
+    }
+
+    @Command(names = "lootbox giveall common", permission = "argon.command.lootbox.giveall.common", description = "Gives a common loot box to every online player")
+    public void givealllootbox(CommandSender sender, @Param(name = "amount", defaultValue = "1") int amount) {
+        Bukkit.getOnlinePlayers().forEach(online -> {
+            ArgonPlugin.get().getBoxHandler().giveLootBox(online, amount);
+        });
+
+        sender.sendMessage(ColorUtil.colorize("&aYou have given x" + amount + " Loot Box to everyone!"));
+    }
+
+    @Command(names = "lootbox giveall mystery", permission = "argon.command.lootbox.giveall.mystery", description = "Gives a mystery box to every online player")
+    public void giveallmysterybox(CommandSender sender, @Param(name = "amount", defaultValue = "1") int amount) {
+        Bukkit.getOnlinePlayers().forEach(online -> {
+            ArgonPlugin.get().getBoxHandler().giveMysteryBox(online, amount);
+        });
+
+        sender.sendMessage(ColorUtil.colorize("&aYou have given x" + amount + " Mystery Box to everyone!"));
+    }
+
     @Command(names = "lootbox give luckyblock", permission = "argon.command.lootbox.give.luckyblock", description = "Gives a lucky block")
     public void giveluckyblock(CommandSender sender, @Param(name = "target") Player target, @Param(name = "amount", defaultValue = "1") int amount) {
         if (ArgonPlugin.get().getBoxHandler().giveLuckyBlock(target, amount)) {
-            sender.sendMessage("Added a lucky block");
+            sender.sendMessage(ColorUtil.colorize("&aYou have given x" + amount + " Lucky Block to " + target.getName() + "!"));
         }
     }
 
     @Command(names = "lootbox give common", permission = "argon.command.lootbox.give.common", description = "Gives a common loot box")
     public void givelootbox(CommandSender sender, @Param(name = "target") Player target, @Param(name = "amount", defaultValue = "1") int amount) {
         if (ArgonPlugin.get().getBoxHandler().giveLootBox(target, amount)) {
-            sender.sendMessage("Added a common loot box");
+            sender.sendMessage(ColorUtil.colorize("&aYou have given x" + amount + " Loot Box to " + target.getName() + "!"));
         }
     }
 
     @Command(names = "lootbox give mystery", permission = "argon.command.lootbox.give.mystery", description = "Gives a mystery box")
     public void givemysterybox(CommandSender sender, @Param(name = "target") Player target, @Param(name = "amount", defaultValue = "1") int amount) {
         if (ArgonPlugin.get().getBoxHandler().giveMysteryBox(target, amount)) {
-            sender.sendMessage("Added a mystery box");
+            sender.sendMessage(ColorUtil.colorize("&aYou have given x" + amount + " Mystery Box to " + target.getName() + "!"));
         }
     }
 
