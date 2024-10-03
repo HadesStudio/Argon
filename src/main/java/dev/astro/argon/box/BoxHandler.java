@@ -8,9 +8,12 @@ import dev.astro.argon.box.editor.MysteryBoxEditor;
 import dev.astro.argon.box.editor.MysteryBoxOpEditor;
 import dev.astro.argon.config.SettingsConfig;
 import dev.astro.argon.item.LootItem;
+import dev.astro.argon.util.BroadcastUtil;
 import dev.astro.argon.util.InventoryUtil;
 import dev.astro.argon.util.ItemBuilder;
+import dev.astro.argon.util.TextUtil;
 import dev.astro.argon.util.config.Config;
+import dev.astro.argon.util.config.Replacement;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -35,6 +38,10 @@ public class BoxHandler {
 
     private ItemStack[] mysteryBoxCommon;
     private ItemStack[] mysteryBoxOp;
+
+    private String mysteryBoxAnnounce;
+    private String luckyBlockAnnounce;
+    private String lootBoxAnnounce;
 
     public BoxHandler(ArgonPlugin instance) {
         this.config = new Config(instance, "boxes.yml");
@@ -89,6 +96,18 @@ public class BoxHandler {
                 mysteryBoxOp = ItemBuilder.fromBase64(config.getString("mystery.op-loot-box"));
             }
 
+            if (config.contains("mystery.op-loot-box-announcement")) {
+                mysteryBoxAnnounce = config.getString("mystery.op-loot-box-announcement");
+            }
+
+            if (config.contains("common-loot-box-announcement")) {
+                lootBoxAnnounce = config.getString("common-loot-box-announcement");
+            }
+
+            if (config.contains("lucky-block-announcement")) {
+                luckyBlockAnnounce = config.getString("lucky-block-announcement");
+            }
+
             if (config.contains("lucky-block")) {
                 luckyBlock = ItemBuilder.fromBase64(config.getString("lucky-block"));
             }
@@ -104,6 +123,10 @@ public class BoxHandler {
         config.set("common-loot-box", ItemBuilder.toBase64(lootBox));
         config.set("mystery.common-loot-box", ItemBuilder.toBase64(mysteryBoxCommon));
         config.set("mystery.op-loot-box", ItemBuilder.toBase64(mysteryBoxOp));
+        config.set("mystery.op-loot-box-announcement", mysteryBoxAnnounce);
+        config.set("common-loot-box-announcement", lootBoxAnnounce);
+        config.set("lucky-block-announcement", luckyBlockAnnounce);
+
         config.set("lucky-block", ItemBuilder.toBase64(luckyBlock));
 
         config.save();
@@ -138,10 +161,17 @@ public class BoxHandler {
         return false;
     }
 
-    public void dropLuckyBlockLoot(Location location) {
+    public void dropLuckyBlockLoot(Player player, Location location) {
         for (int i = 0; i < SettingsConfig.LUCKY_BLOCK_DROPS; i++) {
             ItemStack item = luckyBlock[ThreadLocalRandom.current().nextInt(luckyBlock.length)];
             location.getWorld().dropItemNaturally(location, item);
+        }
+
+        if (!TextUtil.isNull(ArgonPlugin.get().getBoxHandler().getLuckyBlockAnnounce())) {
+            Replacement replacement = new Replacement(ArgonPlugin.get().getBoxHandler().getLuckyBlockAnnounce());
+            replacement.add("<player>", player.getName());
+
+            BroadcastUtil.sendAll(replacement.toString());
         }
     }
 
@@ -183,6 +213,13 @@ public class BoxHandler {
             } else {
                 player.getInventory().addItem(item);
             }
+        }
+
+        if (!TextUtil.isNull(ArgonPlugin.get().getBoxHandler().getLootBoxAnnounce())) {
+            Replacement replacement = new Replacement(ArgonPlugin.get().getBoxHandler().getLootBoxAnnounce());
+            replacement.add("<player>", player.getName());
+
+            BroadcastUtil.sendAll(replacement.toString());
         }
     }
 

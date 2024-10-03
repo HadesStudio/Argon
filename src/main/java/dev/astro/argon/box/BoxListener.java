@@ -51,7 +51,7 @@ public class BoxListener implements Listener {
         Block block = event.getBlock();
 
         if (block.hasMetadata("luckyblock")) {
-            boxHandler.dropLuckyBlockLoot(block.getLocation());
+            boxHandler.dropLuckyBlockLoot(event.getPlayer(), block.getLocation());
             block.setType(Material.AIR);
             block.removeMetadata("luckyblock", ArgonPlugin.getPlugin());
             event.setCancelled(true);

@@ -1,10 +1,7 @@
 package dev.astro.argon.command;
 
 import dev.astro.argon.ArgonPlugin;
-import dev.astro.argon.box.editor.CommonBoxEditor;
-import dev.astro.argon.box.editor.LuckyBlockEditor;
-import dev.astro.argon.box.editor.MysteryBoxEditor;
-import dev.astro.argon.box.editor.MysteryBoxOpEditor;
+import dev.astro.argon.box.editor.*;
 import dev.astro.argon.config.LanguageConfig;
 import dev.astro.argon.config.MenusConfig;
 import dev.astro.argon.config.SettingsConfig;
@@ -68,5 +65,10 @@ public class ArgonCommand {
     @Command(names = "lootbox edit mysteryop", permission = "argon.command.lootbox.edit.mystery", description = "Edit a mystery box op loot")
     public void editmysteryop(Player player) {
         new MysteryBoxOpEditor(player, ArgonPlugin.get().getBoxHandler().getMysteryBoxOp());
+    }
+
+    @Command(names = "lootbox editor", permission = "argon.command.lootbox.editor", description = "Open editor")
+    public void editor(Player player) {
+        new GeneralViewAllMenu().openMenu(player);
     }
 }

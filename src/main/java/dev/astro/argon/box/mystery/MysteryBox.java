@@ -1,6 +1,10 @@
 package dev.astro.argon.box.mystery;
 
+import dev.astro.argon.ArgonPlugin;
+import dev.astro.argon.util.BroadcastUtil;
 import dev.astro.argon.util.InventoryUtil;
+import dev.astro.argon.util.TextUtil;
+import dev.astro.argon.util.config.Replacement;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,12 +23,16 @@ public class MysteryBox {
     private final List<MysteryLoot> rewards;
     private final MysteryLoot opReward;
 
+    @Setter private String announcement;
+
     public MysteryBox(ItemStack[] commonLoot, ItemStack[] opLoot) {
         this.commonLoot = commonLoot;
         this.opLoot = opLoot;
 
         this.rewards = new ArrayList<>();
         this.opReward = selectReward(opLoot);
+
+        this.announcement = ArgonPlugin.get().getBoxHandler().getMysteryBoxAnnounce();
 
         for (int i = 0; i < 9; i++) {
             rewards.add(selectReward(commonLoot));

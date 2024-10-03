@@ -37,7 +37,7 @@ public class LuckyBlockEditor implements Listener {
 
 		if (inventory != null) {
 			if (inventory != player.getInventory()) {
-				if (player.hasPermission("argon.command.lootbox.edit.luckyblock") && title.contains(SettingsConfig.SECONDARY_COLOR + "Lucky Block Editor")) {
+				if (player.hasPermission("argon.command.lootbox.edit.luckyblock") && title.equalsIgnoreCase(SettingsConfig.SECONDARY_COLOR + "Lucky Block Editor")) {
 					List<ItemStack> items = new ArrayList<>();
 					for (int i = 0; i < inventory.getSize(); i++) {
 						ItemStack itemStack = inventory.getItem(i);

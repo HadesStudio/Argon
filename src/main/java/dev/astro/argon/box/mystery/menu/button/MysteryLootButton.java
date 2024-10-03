@@ -2,7 +2,10 @@ package dev.astro.argon.box.mystery.menu.button;
 
 import dev.astro.argon.box.mystery.MysteryBox;
 import dev.astro.argon.item.LootItem;
+import dev.astro.argon.util.BroadcastUtil;
 import dev.astro.argon.util.ItemBuilder;
+import dev.astro.argon.util.TextUtil;
+import dev.astro.argon.util.config.Replacement;
 import dev.astro.argon.util.menu.button.Button;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
@@ -35,6 +38,15 @@ public class MysteryLootButton extends Button {
                 if (!mysteryLoot.isDiscovered()) {
                     mysteryLoot.setDiscovered(true);
                     Button.playSuccess(player);
+
+                    if (!TextUtil.isNull(mysteryBox.getAnnouncement())) {
+                        Replacement replacement = new Replacement(mysteryBox.getAnnouncement());
+                        replacement.add("<player>", player.getName());
+                        replacement.add("<item-name>", mysteryBox.getOpReward().getReward().getItemMeta().getDisplayName());
+                        replacement.add("<item-amount>", mysteryBox.getOpReward().getReward().getAmount());
+
+                        BroadcastUtil.sendAll(replacement.toString());
+                    }
                 }
             } else {
                 Button.playFail(player);

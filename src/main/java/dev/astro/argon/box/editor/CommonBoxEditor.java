@@ -37,7 +37,7 @@ public class CommonBoxEditor implements Listener {
 
 		if (inventory != null) {
 			if (inventory != player.getInventory()) {
-				if (player.hasPermission("argon.command.lootbox.edit.common") && title.contains(SettingsConfig.SECONDARY_COLOR + "Loot Box Editor")) {
+				if (player.hasPermission("argon.command.lootbox.edit.common") && title.equalsIgnoreCase(SettingsConfig.SECONDARY_COLOR + "Loot Box Editor")) {
 					List<ItemStack> items = new ArrayList<>();
 					for (int i = 0; i < inventory.getSize(); i++) {
 						ItemStack itemStack = inventory.getItem(i);
