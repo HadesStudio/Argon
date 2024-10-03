@@ -1,5 +1,6 @@
 package dev.astro.argon.crate.menu.editor;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.astro.argon.config.SettingsConfig;
 import dev.astro.argon.crate.Crate;
 import dev.astro.argon.crate.menu.CrateViewAllMenu;
@@ -180,8 +181,8 @@ public class CrateEditorMenu extends Menu {
 				if (cursor.getType() == Material.AIR) {
 					return;
 				}
-				
-				if (!cursor.getType().isBlock()) {
+
+				if (!cursor.getType().isBlock() && cursor.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) {
 					return;
 				}
 				
