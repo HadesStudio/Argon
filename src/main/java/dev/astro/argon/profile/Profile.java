@@ -51,9 +51,10 @@ public class Profile implements Serializable<Profile> {
     }
 
     public void addVirtualKey(UUID id, int amount) {
-        if (virtualKeys.containsKey(id)) virtualKeys.put(id, virtualKeys.get(id) + amount);
-
-        virtualKeys.put(id, amount);
+        if (virtualKeys.containsKey(id))
+            virtualKeys.put(id, virtualKeys.get(id) + amount);
+        else
+            virtualKeys.put(id, amount);
     }
 
     public void removeVirtualKey(UUID id, int amount) {
