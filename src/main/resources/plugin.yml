@@ -1,6 +1,6 @@
-author: Rage Development Team
+author: Astro Operations
 name: Argon
-version: 0.2-STABLE
+version: 0.3-STABLE
 main: dev.astro.argon.ArgonPlugin
 softdepend:
   - DecentHolograms
