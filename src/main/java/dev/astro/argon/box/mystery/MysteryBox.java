@@ -50,6 +50,15 @@ public class MysteryBox {
             player.getInventory().addItem(opReward.reward);
         }
 
+        if (!TextUtil.isNull(announcement)) {
+            Replacement replacement = new Replacement(announcement);
+            replacement.add("<player>", player.getName());
+            replacement.add("<item-name>", opReward.reward.getItemMeta().getDisplayName() == null ? opReward.reward.getType().name() : opReward.reward.getItemMeta().getDisplayName());
+            replacement.add("<item-amount>", opReward.reward.getAmount());
+
+            BroadcastUtil.sendAll(replacement.toString());
+        }
+
         for (MysteryLoot loot : rewards) {
             if (InventoryUtil.isFull(player)) {
                 player.getLocation().getWorld().dropItemNaturally(player.getLocation(), loot.reward);

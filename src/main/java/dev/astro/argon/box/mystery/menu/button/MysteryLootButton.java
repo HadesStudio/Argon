@@ -38,15 +38,6 @@ public class MysteryLootButton extends Button {
                 if (!mysteryLoot.isDiscovered()) {
                     mysteryLoot.setDiscovered(true);
                     Button.playSuccess(player);
-
-                    if (!TextUtil.isNull(mysteryBox.getAnnouncement())) {
-                        Replacement replacement = new Replacement(mysteryBox.getAnnouncement());
-                        replacement.add("<player>", player.getName());
-                        replacement.add("<item-name>", mysteryBox.getOpReward().getReward().getItemMeta().getDisplayName());
-                        replacement.add("<item-amount>", mysteryBox.getOpReward().getReward().getAmount());
-
-                        BroadcastUtil.sendAll(replacement.toString());
-                    }
                 }
             } else {
                 Button.playFail(player);

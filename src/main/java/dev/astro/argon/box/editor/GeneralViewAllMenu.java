@@ -47,7 +47,7 @@ public class GeneralViewAllMenu extends Menu {
 
 			@Override
 			public void clicked(Player player, ClickType clickType) {
-				new LuckyBlockEditMenu(null).openMenu(player);
+				new LuckyBlockEditMenu().openMenu(player);
 			}
 		});
 
@@ -90,7 +90,7 @@ public class GeneralViewAllMenu extends Menu {
 
 			@Override
 			public void clicked(Player player, ClickType clickType) {
-				new LootBoxEditMenu(null).openMenu(player);
+				new LootBoxEditMenu().openMenu(player);
 			}
 		});
 		return buttons;
