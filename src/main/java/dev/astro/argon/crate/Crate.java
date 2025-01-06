@@ -27,6 +27,7 @@ public class Crate implements Serializable<Crate> {
 
     private final UUID id;
     private String name;
+    private String animation;
 
     private ChatColor color;
     private ItemStack opener;
@@ -144,6 +145,7 @@ public class Crate implements Serializable<Crate> {
         Map<String, Object> map = new LinkedHashMap<>();
 
         map.put("name", name);
+        map.put("animation", animation);
 
         map.put("color", color.name());
         map.put("opener", ItemStackSerializer.INSTANCE.toString(opener));
@@ -165,6 +167,7 @@ public class Crate implements Serializable<Crate> {
     @Override
     public void deserialize(Map<String, Object> map) {
         name = (String) map.get("name");
+        animation = (String) map.getOrDefault("animation", "");
 
         color = ChatColor.valueOf((String) map.get("color"));
 

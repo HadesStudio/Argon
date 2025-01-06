@@ -74,6 +74,20 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/DecentHolograms.jar</systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.juliarn</groupId>
+            <artifactId>npc-lib-bukkit</artifactId>
+            <version>3.0.0-beta10</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fierioziy.particlenativeapi</groupId>
+            <artifactId>ParticleNativeAPI-core</artifactId>
+            <version>4.4.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -99,6 +113,10 @@
                             <pattern>com.cryptomorin.xseries</pattern>
                             <!-- Be sure to change the package below -->
                             <shadedPattern>dev.astro.argon.shade.xseries</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.github.fierioziy.particlenativeapi</pattern>
+                            <shadedPattern>me.yourpluginpackage.particleapi</shadedPattern>
                         </relocation>
                     </relocations>
 

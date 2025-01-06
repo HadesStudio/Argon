@@ -1,8 +1,11 @@
 package dev.astro.argon.util;
 
+import com.github.fierioziy.particlenativeapi.api.ParticleNativeAPI;
 import dev.astro.argon.ArgonPlugin;
+import dev.astro.argon.animation.AnimationManager;
 import dev.astro.argon.box.BoxHandler;
 import dev.astro.argon.crate.CrateHandler;
+import dev.astro.argon.npc.NPCRegistrar;
 import dev.astro.argon.profile.ProfileHandler;
 import dev.astro.argon.util.command.CommandHandler;
 import dev.astro.argon.util.config.Config;
@@ -19,6 +22,10 @@ public class Argon {
     private CrateHandler crateHandler;
     private ProfileHandler profileHandler;
     private BoxHandler boxHandler;
+
+    private NPCRegistrar npcRegistrar;
+    private ParticleNativeAPI particleNativeAPI;
+    private AnimationManager animationManager;
 
     private Config licenseFile;
 

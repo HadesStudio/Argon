@@ -1,10 +1,15 @@
 package dev.astro.argon.command;
 
 import dev.astro.argon.ArgonPlugin;
-import dev.astro.argon.box.editor.*;
+import dev.astro.argon.box.editor.CommonBoxEditor;
+import dev.astro.argon.box.editor.GeneralViewAllMenu;
+import dev.astro.argon.box.editor.LuckyBlockEditor;
+import dev.astro.argon.box.editor.MysteryBoxEditor;
+import dev.astro.argon.box.editor.MysteryBoxOpEditor;
 import dev.astro.argon.config.LanguageConfig;
 import dev.astro.argon.config.MenusConfig;
 import dev.astro.argon.config.SettingsConfig;
+import dev.astro.argon.crate.menu.crates.CratesMenu;
 import dev.astro.argon.util.ColorUtil;
 import dev.astro.argon.util.ReflectionUtil;
 import dev.astro.argon.util.command.annotation.Command;
@@ -98,5 +103,10 @@ public class ArgonCommand {
     @Command(names = "lootbox editor", permission = "argon.command.lootbox.editor", description = "Open editor")
     public void editor(Player player) {
         new GeneralViewAllMenu().openMenu(player);
+    }
+
+    @Command(names = "crates")
+    public void crates(Player player) {
+        new CratesMenu().openMenu(player);
     }
 }

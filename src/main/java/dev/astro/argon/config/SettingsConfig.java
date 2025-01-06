@@ -101,6 +101,18 @@ public class SettingsConfig extends ConfigCreator {
     @Path(id = "color.secondary")
     public static ChatColor SECONDARY_COLOR = ChatColor.RED;
 
+    @Path(id = "packet-library")
+    public static String PACKET_LIBRARY = "packetevents";
+
+    @Path(id = "crates.menu.enable-open-crates-menu")
+    public static boolean ENABLE_OPEN_CRATES_MENU = true;
+
+    @Path(id = "crates.menu.shift-click-to-massive-open.enabled")
+    public static boolean SHIFT_CLICK_TO_MASSIVE_OPEN_ENABLED = true;
+
+    @Path(id = "crates.menu.shift-click-to-massive-open.amount")
+    public static int SHIFT_CLICK_TO_MASSIVE_OPEN_AMOUNT = 100;
+
     public SettingsConfig(JavaPlugin plugin) {
         super(plugin, "settings.yml");
 

@@ -50,6 +50,12 @@ public class CrateListener implements Listener {
                     player.sendMessage(ColorUtil.colorize(replacement.toString()));
                 }
             }
+            for (Crate crate : crateHandler.getCrates()) {
+                if (crateHandler.isKey(crate, hand)) {
+                    event.setCancelled(true);
+                    break;
+                }
+            }
         }
     }
 

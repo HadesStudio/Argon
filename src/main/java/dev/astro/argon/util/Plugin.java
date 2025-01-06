@@ -1,22 +1,30 @@
 package dev.astro.argon.util;
 
+import com.github.fierioziy.particlenativeapi.core.ParticleNativeCore;
 import dev.astro.argon.ArgonPlugin;
+import dev.astro.argon.animation.AnimationManager;
 import dev.astro.argon.box.BoxHandler;
 import dev.astro.argon.command.ArgonCommand;
 import dev.astro.argon.config.LanguageConfig;
 import dev.astro.argon.config.MenusConfig;
 import dev.astro.argon.config.SettingsConfig;
 import dev.astro.argon.crate.CrateHandler;
+import dev.astro.argon.npc.NPCRegistrar;
 import dev.astro.argon.profile.ProfileHandler;
 import dev.astro.argon.util.command.bukkit.BukkitCommandHandler;
 import dev.astro.argon.util.menu.MenuListener;
 import dev.astro.argon.util.menu.runnable.MenuUpdateRunnable;
 import dev.astro.argon.util.prompt.PromptHandler;
 import lombok.Getter;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.bukkit.Bukkit;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -75,6 +83,8 @@ public class Plugin {
                                     Bukkit.getConsoleSender().sendMessage(ColorUtil.colorize(s)));
 
 
+                    new File(ArgonPlugin.getPlugin().getDataFolder(), "npcs").mkdirs();
+
                     new LanguageConfig(ArgonPlugin.getPlugin());
                     new MenusConfig(ArgonPlugin.getPlugin());
                     new SettingsConfig(ArgonPlugin.getPlugin());
@@ -86,7 +96,13 @@ public class Plugin {
                     ArgonPlugin.get().setProfileHandler(new ProfileHandler(ArgonPlugin.getPlugin()));
                     ArgonPlugin.get().setBoxHandler(new BoxHandler(ArgonPlugin.getPlugin()));
 
+                    ArgonPlugin.get().setNpcRegistrar(new NPCRegistrar(ArgonPlugin.getPlugin()));
+                    ArgonPlugin.get().getNpcRegistrar().fireUp();
+
                     ArgonPlugin.get().getCommandHandler().register(new ArgonCommand());
+
+                    ArgonPlugin.get().setAnimationManager(new AnimationManager(ArgonPlugin.getPlugin()));
+                    ArgonPlugin.get().setParticleNativeAPI(ParticleNativeCore.loadAPI(ArgonPlugin.getPlugin()));
 
                     Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(ArgonPlugin.getPlugin()), ArgonPlugin.getPlugin());
 

@@ -92,7 +92,7 @@ public class CrateHandler {
         }
     }
 
-    private void save() {
+    public void save() {
         config.set("crates", null);
 
         for (Crate crate : crates) {

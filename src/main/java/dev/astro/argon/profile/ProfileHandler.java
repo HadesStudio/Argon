@@ -5,6 +5,7 @@ import dev.astro.argon.profile.command.ProfileCommands;
 import dev.astro.argon.util.config.Config;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -45,12 +46,18 @@ public class ProfileHandler {
             Map<UUID, Integer> storedKeys = new HashMap<>();
             Map<UUID, Integer> virtualKeys = new HashMap<>();
 
-            for (String key : config.getConfigurationSection("profiles." + id.toString() + ".stored-keys").getKeys(false)) {
-                storedKeys.put(UUID.fromString(key), config.getInt("profiles." + id.toString() + ".stored-keys." + key));
+            ConfigurationSection storedKeysCS = config.getConfigurationSection("profiles." + id.toString() + ".stored-keys");
+            if (storedKeysCS != null) {
+                for (String key : storedKeysCS.getKeys(false)) {
+                    storedKeys.put(UUID.fromString(key), config.getInt("profiles." + id.toString() + ".stored-keys." + key));
+                }
             }
 
-            for (String key : config.getConfigurationSection("profiles." + id.toString() + ".virtual-keys").getKeys(false)) {
-                virtualKeys.put(UUID.fromString(key), config.getInt("profiles." + id.toString() + ".virtual-keys." + key));
+            ConfigurationSection virtualKeysCS = config.getConfigurationSection("profiles." + id.toString() + ".virtual-keys");
+            if (virtualKeysCS != null) {
+                for (String key : virtualKeysCS.getKeys(false)) {
+                    virtualKeys.put(UUID.fromString(key), config.getInt("profiles." + id.toString() + ".virtual-keys." + key));
+                }
             }
 
             profile.setStoredKeys(storedKeys);

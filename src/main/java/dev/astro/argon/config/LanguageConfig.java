@@ -4,6 +4,9 @@ import dev.astro.argon.util.config.creator.ConfigCreator;
 import dev.astro.argon.util.config.creator.annotation.Path;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class LanguageConfig extends ConfigCreator {
 
     public static LanguageConfig INSTANCE;
@@ -75,6 +78,26 @@ public class LanguageConfig extends ConfigCreator {
 
     @Path(id = "misc.command.only-players")
     public static String COMMAND_ONLY_PLAYERS = "&cOnly players can execute that command.";
+
+    @Path(id = "npc.command.create")
+    public static String NPC_CREATE = "&aNPC created successfully. Type \"/crate npc\" to see more info";
+
+    @Path(id = "npc.command.delete")
+    public static String NPC_DELETE = "&cNPC deleted successfully.";
+
+    @Path(id = "npc.command.not-found")
+    public static String NPC_NOT_FOUND = "&cThat NPC cannot be found. Is the name right?";
+
+    @Path(id = "crates.menu.title")
+    public static String CRATES_MENU_TITLE = "&eCrates";
+
+    @Path(id = "crates.menu.lore")
+    public static List<String> CRATES_MENU_LORE = Arrays.asList(
+            "<key_lore>",
+            "&7Click to open the crate.",
+            "&7Shift + Click to open by <massive_open> keys.",
+            "&7You have &f<amount> &7keys."
+    );
 
     public LanguageConfig(JavaPlugin plugin) {
         super(plugin, "language.yml");

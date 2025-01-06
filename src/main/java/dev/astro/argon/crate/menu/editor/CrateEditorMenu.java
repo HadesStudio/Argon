@@ -5,6 +5,7 @@ import dev.astro.argon.config.SettingsConfig;
 import dev.astro.argon.crate.Crate;
 import dev.astro.argon.crate.menu.CrateViewAllMenu;
 import dev.astro.argon.crate.menu.button.CrateInfoButton;
+import dev.astro.argon.crate.menu.editor.button.CrateChangeAnimationButton;
 import dev.astro.argon.crate.menu.editor.button.CrateEditButton;
 import dev.astro.argon.crate.menu.editor.button.CrateHologramButton;
 import dev.astro.argon.crate.menu.location.CrateLocationsMenu;
@@ -158,7 +159,8 @@ public class CrateEditorMenu extends Menu {
 		));
 
 		buttons.put(12, new CrateHologramButton(crate, this));
-		
+		buttons.put(13, new CrateChangeAnimationButton(crate, this));
+
 		buttons.put(30, new Button() {
 			
 			@Override
